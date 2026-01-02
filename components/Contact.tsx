@@ -1,0 +1,118 @@
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Mail, Phone, Linkedin, Github, Send } from 'lucide-react';
+import { PERSONAL_INFO } from '../constants';
+
+const Contact: React.FC = () => {
+  return (
+    <section id="contact" className="py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <div className="space-y-4">
+              <h3 className="text-blue-600 dark:text-blue-500 font-mono text-sm uppercase tracking-widest">Connectivity</h3>
+              <h2 className="text-5xl font-bold text-slate-900 dark:text-white leading-tight">Let's Build Something Great Together</h2>
+              <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-md">
+                Looking for a dedicated DevOps associate or have a project that needs cloud scaling? Reach out!
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 p-4 glass-card rounded-2xl border-slate-200 dark:border-white/5 group hover:border-blue-500/20 transition-all shadow-sm dark:shadow-none">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-500 group-hover:scale-110 transition-transform">
+                  <Mail size={22} />
+                </div>
+                <div>
+                  <p className="text-xs font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">Email</p>
+                  <a href={`mailto:${PERSONAL_INFO.email}`} className="text-slate-900 dark:text-white font-medium hover:text-blue-600 transition-colors">
+                    {PERSONAL_INFO.email}
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 p-4 glass-card rounded-2xl border-slate-200 dark:border-white/5 group hover:border-emerald-500/20 transition-all shadow-sm dark:shadow-none">
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-500 group-hover:scale-110 transition-transform">
+                  <Phone size={22} />
+                </div>
+                <div>
+                  <p className="text-xs font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">Phone</p>
+                  <a href={`tel:${PERSONAL_INFO.phone.replace(/\s/g, '')}`} className="text-slate-900 dark:text-white font-medium hover:text-emerald-600 transition-colors">
+                    {PERSONAL_INFO.phone}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex space-x-4 pt-4">
+              <a href={PERSONAL_INFO.linkedin} className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500/30 shadow-sm dark:shadow-none transition-all">
+                <Linkedin size={22} />
+              </a>
+              <a href={PERSONAL_INFO.github} className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20 shadow-sm dark:shadow-none transition-all">
+                <Github size={22} />
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-10 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xl dark:shadow-none"
+          >
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-mono text-slate-500 uppercase tracking-widest px-1">Full Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="John Doe"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-mono text-slate-500 uppercase tracking-widest px-1">Email Address</label>
+                  <input 
+                    type="email" 
+                    placeholder="john@example.com"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-xs font-mono text-slate-500 uppercase tracking-widest px-1">Subject</label>
+                <input 
+                  type="text" 
+                  placeholder="Inquiry about DevOps Role"
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-mono text-slate-500 uppercase tracking-widest px-1">Your Message</label>
+                <textarea 
+                  rows={4}
+                  placeholder="Tell me about your project..."
+                  className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                />
+              </div>
+
+              <button className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center group active:scale-[0.98]">
+                Send Message
+                <Send className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
