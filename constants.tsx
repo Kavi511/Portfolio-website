@@ -23,8 +23,10 @@ export const PERSONAL_INFO = {
   location: "Colombo, Sri Lanka",
   email: "kavishkacherath@gmail.com",
   phone: "+94 72 764 3866",
-  github: "https://github.com/kavishka",
-  linkedin: "https://linkedin.com/in/kavishka"
+  github: "https://github.com/Kavi511",
+  linkedin: "https://www.linkedin.com/in/kavishka-herath-2ab2b3245/",
+  medium: "https://medium.com/@kavishkacherath",
+  x: "https://x.com/herath_kavishka"
 };
 
 export const PROFESSIONAL_SUMMARY = {
