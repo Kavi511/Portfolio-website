@@ -53,7 +53,7 @@ const BackgroundParticles: React.FC = () => {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         // Adjust particle opacity based on theme
-        ctx.fillStyle = isDark ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.4)';
+        ctx.fillStyle = isDark ? 'rgba(34, 197, 94, 0.3)' : 'rgba(34, 197, 94, 0.4)';
         ctx.fill();
       }
     }
@@ -84,9 +84,9 @@ const BackgroundParticles: React.FC = () => {
           if (dist < connectionDistance) {
             ctx.beginPath();
             // Connection line color based on theme
-            const color = isDark ? 59 : 37;
+            const color = isDark ? 34 : 22;
             const opacity = isDark ? 0.12 : 0.08;
-            ctx.strokeStyle = `rgba(${color}, 130, 246, ${opacity * (1 - dist / connectionDistance)})`;
+            ctx.strokeStyle = `rgba(${color}, 197, 94, ${opacity * (1 - dist / connectionDistance)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
@@ -113,7 +113,7 @@ const BackgroundParticles: React.FC = () => {
   }, [isDark]);
 
   return (
-    <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none transition-colors duration-500 bg-slate-50 dark:bg-[#020617]">
+    <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none transition-colors duration-500 bg-slate-50 dark:bg-black">
       {/* Animated Aura Blobs */}
       <motion.div
         animate={{
@@ -127,7 +127,7 @@ const BackgroundParticles: React.FC = () => {
           ease: "linear",
         }}
         className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] transition-colors duration-700 ${
-          isDark ? 'bg-blue-600/10' : 'bg-blue-400/10'
+          isDark ? 'bg-green-500/10' : 'bg-green-400/10'
         }`}
       />
       <motion.div
@@ -151,17 +151,6 @@ const BackgroundParticles: React.FC = () => {
         ref={canvasRef}
         className="absolute inset-0"
         style={{ background: 'transparent' }}
-      />
-
-      {/* Grid Pattern Overlay */}
-      <div 
-        className={`absolute inset-0 transition-opacity duration-700 ${isDark ? 'opacity-[0.03]' : 'opacity-[0.02]'}`}
-        style={{ 
-          backgroundImage: isDark 
-            ? `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`
-            : `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}
       />
     </div>
   );

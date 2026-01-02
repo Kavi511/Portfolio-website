@@ -2,14 +2,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
-import { EXPERIENCES } from '../constants';
+import { useSiteData } from '../contexts/SiteDataContext';
 
 const Experience: React.FC = () => {
+  const { siteData } = useSiteData();
+  const EXPERIENCES = siteData.experiences;
   return (
     <section id="experience" className="py-24 bg-white/30 dark:bg-slate-950/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <h3 className="text-blue-600 dark:text-blue-500 font-mono text-sm uppercase tracking-widest">Career Path</h3>
+          <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest">Career Path</h3>
           <h2 className="text-4xl font-bold text-slate-900 dark:text-white">Work Experience</h2>
         </div>
 
@@ -30,19 +32,19 @@ const Experience: React.FC = () => {
                 }`}
               >
                 {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-blue-600 dark:bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.6)] z-10"></div>
+                <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-10"></div>
 
                 {/* Content Card */}
                 <div className="ml-8 md:ml-0 md:w-[45%]">
-                  <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-white/10 transition-all group shadow-sm dark:shadow-none">
+                  <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-green-500/30 dark:hover:border-white/10 transition-all group shadow-sm dark:shadow-none">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="p-2 bg-blue-500/10 text-blue-600 dark:text-blue-500 rounded-lg">
+                      <div className="p-2 bg-green-500/10 text-green-500 dark:text-green-400 rounded-lg">
                         <Briefcase size={18} />
                       </div>
                       <span className="text-xs font-mono text-slate-400 dark:text-slate-500">{exp.period}</span>
                     </div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">{exp.role}</h4>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium mb-4">{exp.company}</p>
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors mb-1">{exp.role}</h4>
+                    <p className="text-green-500 dark:text-green-400 font-medium mb-4">{exp.company}</p>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
                       {exp.description}
                     </p>

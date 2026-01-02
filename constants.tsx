@@ -11,7 +11,8 @@ import {
   Network, 
   Cpu, 
   GitBranch, 
-  Monitor 
+  Monitor,
+  TestTube
 } from 'lucide-react';
 import { Experience, SkillCategory, Project } from './types';
 
@@ -21,6 +22,7 @@ export const PERSONAL_INFO = {
   tagline: "Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.",
   about: "A final year Computer Science undergraduate passionate about Cloud Computing and DevOps. Focused on building highly available, scalable, and automated systems that empower developers and enhance operational efficiency.",
   location: "Colombo, Sri Lanka",
+  education: "CINEC Campus (Pvt) Ltd – Sri Lanka\nBSc (Hons) Computer Science (University of Wolverhampton)",
   email: "kavishkacherath@gmail.com",
   phone: "+94 72 764 3866",
   github: "https://github.com/Kavi511",
@@ -67,37 +69,83 @@ export const SKILL_CATEGORIES: (SkillCategory & { icon: React.ReactNode })[] = [
   {
     name: "Cloud & Infrastructure",
     icon: <Cloud className="w-5 h-5" />,
-    skills: ["AWS (EC2, S3, IAM, VPC)", "Azure Basics", "CloudFormation"]
+    skills: [
+      "AWS Core Services (EC2, S3, RDS, VPC, IAM, CloudFront, ACM, WAF)",
+      "AWS ECS (Fargate)",
+      "AWS Lambda",
+      "AWS Cost Monitoring & Optimization (Fundamentals)"
+    ]
   },
   {
-    name: "IaC",
+    name: "Infrastructure as Code (IaC)",
     icon: <Cpu className="w-5 h-5" />,
-    skills: ["Terraform", "Ansible", "Packer"]
+    skills: [
+      "Terraform",
+      "AWS CloudFormation (Fundamentals)"
+    ]
   },
   {
     name: "Containers & CI/CD",
     icon: <Box className="w-5 h-5" />,
-    skills: ["Docker", "Kubernetes (K8s)", "GitHub Actions", "Jenkins"]
+    skills: [
+      "Docker",
+      "GitHub Actions",
+      "Secure CI/CD Pipelines",
+      "HTTPS Deployments",
+      "Auto-scaling & High Availability Architectures (Fundamentals)"
+    ]
   },
   {
     name: "Monitoring & Observability",
     icon: <Activity className="w-5 h-5" />,
-    skills: ["Prometheus", "Grafana", "ELK Stack", "CloudWatch"]
+    skills: [
+      "AWS CloudWatch",
+      "Prometheus",
+      "Grafana (Metrics, Dashboards, Alerts Fundamentals)"
+    ]
   },
   {
     name: "Security & Networking",
     icon: <ShieldCheck className="w-5 h-5" />,
-    skills: ["VPC Security Groups", "IAM Policies", "WAF", "SSL/TLS"]
+    skills: [
+      "AWS Security Best Practices (IAM, Least Privilege, WAF)",
+      "AWS Secrets Manager",
+      "Networking Fundamentals (VPC, Subnets, Routing, Security Groups)"
+    ]
+  },
+  {
+    name: "DNS & SSL Management",
+    icon: <Network className="w-5 h-5" />,
+    skills: [
+      "Cloudflare (DNS Management, SSL/TLS Configuration)"
+    ]
+  },
+  {
+    name: "Systems & Automation",
+    icon: <Terminal className="w-5 h-5" />,
+    skills: [
+      "Linux Fundamentals",
+      "Python Scripting & Automation",
+      "Git & Version Control"
+    ]
   },
   {
     name: "Databases & Platforms",
     icon: <Database className="w-5 h-5" />,
-    skills: ["PostgreSQL", "MongoDB", "Redis", "Linux (Debian/RHEL)"]
+    skills: [
+      "PostgreSQL",
+      "MySQL",
+      "Kubernetes (Fundamentals)"
+    ]
   },
   {
-    name: "Developer Tools",
+    name: "IDEs & Developer Tools",
     icon: <Code2 className="w-5 h-5" />,
-    skills: ["Bash Scripting", "Python", "Git", "VS Code", "Postman"]
+    skills: [
+      "Visual Studio Code",
+      "IntelliJ IDEA",
+      "Cursor"
+    ]
   }
 ];
 
