@@ -1,36 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Terminal, Sun, Moon } from 'lucide-react';
+import { Menu, X, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     
-    // Set initial state from HTML class
-    setIsDark(document.documentElement.classList.contains('dark'));
-    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    if (newTheme) {
-      document.documentElement.classList.add('dark');
-      localStorage.theme = 'dark';
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.theme = 'light';
-    }
-  };
 
   const navLinks = [
     { name: 'About', href: '#about' },
@@ -45,7 +30,7 @@ const Navbar: React.FC = () => {
       scrolled 
         ? 'bg-white/80 dark:bg-[#020617]/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10 py-4 shadow-sm dark:shadow-none' 
         : 'bg-transparent py-6'
-    }`}>
+    } transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2 group cursor-pointer">
@@ -69,35 +54,7 @@ const Navbar: React.FC = () => {
             ))}
             
             {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors relative overflow-hidden"
-              aria-label="Toggle Theme"
-            >
-              <AnimatePresence mode="wait">
-                {isDark ? (
-                  <motion.div
-                    key="sun"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Sun size={20} />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="moon"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Moon size={20} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+            <ThemeToggle />
 
             <a
               href="#contact"
@@ -108,15 +65,11 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4 md:hidden">
-             <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-            >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            <ThemeToggle />
             <button
-              className="text-slate-900 dark:text-slate-100 p-2"
+              className="text-slate-900 dark:text-slate-100 p-2 transition-colors duration-300"
               onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -131,7 +84,7 @@ const Navbar: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-white/10 overflow-hidden"
+            className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-white/10 overflow-hidden transition-colors duration-300"
           >
             <div className="px-4 py-8 flex flex-col space-y-4 items-center">
               {navLinks.map((link) => (

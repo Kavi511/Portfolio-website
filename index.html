@@ -5,14 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kavishka Herath | DevOps Engineer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
       // Initialize theme early to avoid flashing
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      (function() {
+        const theme = localStorage.getItem('theme') || 'system';
+        let isDark = false;
+        
+        if (theme === 'dark') {
+          isDark = true;
+        } else if (theme === 'light') {
+          isDark = false;
+        } else {
+          // system
+          isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+        
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Configure Tailwind for class-based dark mode
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            transitionProperty: {
+              'colors': 'color, background-color, border-color, text-decoration-color, fill, stroke',
+            }
+          }
+        }
+      };
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,6 +69,11 @@
         ::selection {
             background: rgba(59, 130, 246, 0.3);
             color: #fff;
+        }
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
         }
     </style>
 <script type="importmap">
