@@ -39,14 +39,14 @@ const Experience: React.FC = () => {
 
                 {/* Content Card */}
                 <div className="ml-8 md:ml-0 md:w-[45%]">
-                  <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-green-500/30 dark:hover:border-white/10 transition-all group shadow-sm dark:shadow-none">
+                  <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-white/5 transition-all group shadow-sm dark:shadow-none">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-2 bg-green-500/10 text-green-500 dark:text-green-400 rounded-lg">
                         <Briefcase size={18} />
                       </div>
                       <span className="text-xs font-mono text-slate-400 dark:text-slate-500">{exp.period}</span>
                     </div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors mb-1">{exp.role}</h4>
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white transition-colors mb-1">{exp.role}</h4>
                     <p className="text-green-500 dark:text-green-400 font-medium mb-4">{exp.company}</p>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm text-justify" style={{ textAlignLast: 'left', wordSpacing: '0.05em', letterSpacing: '0.01em' }}>
                       {exp.description}

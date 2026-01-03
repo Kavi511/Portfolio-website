@@ -52,8 +52,8 @@ const BackgroundParticles: React.FC = () => {
         if (!ctx) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Adjust particle opacity based on theme - more visible in light mode
-        ctx.fillStyle = isDark ? 'rgba(34, 197, 94, 0.3)' : 'rgba(34, 197, 94, 0.6)';
+        // Black particles in light mode, white particles in dark mode
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
         ctx.fill();
       }
     }
@@ -83,11 +83,12 @@ const BackgroundParticles: React.FC = () => {
 
           if (dist < connectionDistance) {
             ctx.beginPath();
-            // Connection line color based on theme - more visible in light mode
-            const color = isDark ? 34 : 34;
-            const opacity = isDark ? 0.12 : 0.25;
-            ctx.strokeStyle = `rgba(${color}, 197, 94, ${opacity * (1 - dist / connectionDistance)})`;
-            ctx.lineWidth = isDark ? 0.5 : 0.8;
+            // Connection line color: white in dark mode, black in light mode
+            const opacity = isDark ? 0.3 : 0.4;
+            ctx.strokeStyle = isDark 
+              ? `rgba(255, 255, 255, ${opacity * (1 - dist / connectionDistance)})`
+              : `rgba(0, 0, 0, ${opacity * (1 - dist / connectionDistance)})`;
+            ctx.lineWidth = isDark ? 0.8 : 1;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.stroke();
@@ -127,7 +128,7 @@ const BackgroundParticles: React.FC = () => {
           ease: "linear",
         }}
         className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] transition-colors duration-700 ${
-          isDark ? 'bg-green-500/10' : 'bg-green-500/20'
+          isDark ? 'bg-white/10' : 'bg-black/10'
         }`}
       />
       <motion.div
@@ -142,7 +143,7 @@ const BackgroundParticles: React.FC = () => {
           ease: "linear",
         }}
         className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[120px] transition-colors duration-700 ${
-          isDark ? 'bg-indigo-600/10' : 'bg-green-400/15'
+          isDark ? 'bg-white/8' : 'bg-black/8'
         }`}
       />
       

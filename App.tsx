@@ -35,7 +35,7 @@ function AppContent() {
             <Certifications />
           </main>
 
-          <footer id="footer" className="py-16 border-t border-slate-200 dark:border-white/5 bg-slate-50/80 dark:bg-black/80 backdrop-blur-sm relative z-10 transition-colors duration-300">
+          <footer id="footer" className="py-16 border-t border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-black/50 backdrop-blur-sm relative z-10 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {/* Get In Touch Section */}
               <div className="mb-12">

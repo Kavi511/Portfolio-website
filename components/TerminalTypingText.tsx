@@ -6,6 +6,8 @@ interface TerminalTypingTextProps {
   prompt?: string;
   className?: string;
   onComplete?: () => void;
+  showCursor?: boolean;
+  showCursorAfterComplete?: boolean;
 }
 
 const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({ 
@@ -13,7 +15,9 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
   speed = 80, 
   prompt = '$ ',
   className = '',
-  onComplete 
+  onComplete,
+  showCursor: showCursorProp = true,
+  showCursorAfterComplete: showCursorAfterCompleteProp = false
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,11 +26,12 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
 
   // Blinking cursor animation
   useEffect(() => {
+    if (!showCursorProp) return;
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
     }, 530);
     return () => clearInterval(cursorInterval);
-  }, []);
+  }, [showCursorProp]);
 
   // Typing animation
   useEffect(() => {
@@ -49,8 +54,14 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
     <span className={`font-mono ${className}`}>
       <span className="text-slate-900 dark:text-white">{prompt}</span>
       <span className="text-slate-700 dark:text-slate-300">{displayedText}</span>
-      <span className={`text-slate-900 dark:text-white ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
-      </span>
+      {showCursorProp && (
+        <span className={`text-slate-900 dark:text-white ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
+        </span>
+      )}
+      {!showCursorProp && isComplete && showCursorAfterCompleteProp && (
+        <span className="text-slate-900 dark:text-white ml-0.5 inline-block w-0.5 h-4 align-middle animate-pulse bg-current">
+        </span>
+      )}
     </span>
   );
 };

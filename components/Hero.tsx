@@ -72,6 +72,8 @@ const Hero: React.FC = () => {
                   speed={50}
                   prompt="$ "
                   className="text-slate-700 dark:text-slate-300"
+                  showCursor={false}
+                  showCursorAfterComplete={false}
                   onComplete={() => {
                     setTimeout(() => setShowTagline(true), 500);
                   }}
@@ -91,6 +93,8 @@ const Hero: React.FC = () => {
                   speed={30}
                   prompt="$ "
                   className="text-slate-600 dark:text-slate-400"
+                  showCursor={false}
+                  showCursorAfterComplete={true}
                 />
               </motion.p>
             )}
