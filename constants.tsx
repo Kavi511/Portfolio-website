@@ -44,24 +44,24 @@ export const PROFESSIONAL_SUMMARY = {
 export const EXPERIENCES: Experience[] = [
   {
     id: 'exp-3',
-    role: "MC Associate",
-    company: "Orfium",
-    period: "Feb 2025 – Jul 2025",
-    description: "Managing content operations and refining automated workflows within a large-scale digital rights management platform."
+    role: "MC Associate – YouTube Project",
+    company: "Orfium Sri Lanka",
+    period: "Feb 2025 - Jul 2025 | Full-time | Hybrid",
+    description: "Managed YouTube Music copyright claims and CMS operations for global music clients, working directly with record labels and publishers. Ensured content compliance with YouTube and partner guidelines, conducted thorough metadata reviews and resolved conflicts to maintain accurate rights management for clients' content."
   },
   {
     id: 'exp-2',
-    role: "Research Associate",
-    company: "Orfium",
-    period: "Nov 2023 – Jan 2025",
-    description: "Conducted data-driven research to optimize system efficiency and identify process improvements in media-tech operations."
+    role: "Research Associate – TikTok & Meta Project",
+    company: "Orfium Sri Lanka",
+    period: "Nov 2023 - Jan 2025 | Full-time | Hybrid",
+    description: "Led content classification initiatives for TikTok by reviewing and categorizing multimedia content in alignment with platform community guidelines, working directly with record labels and music publishers and contributing high quality labeled data to support the training and improvement of AI-based content moderation models."
   },
   {
     id: 'exp-1',
     role: "Process Associate",
-    company: "Infomate",
-    period: "Jul 2022 – Jun 2023",
-    description: "Executed back-office operational processes with a focus on accuracy, data integrity, and timeline adherence."
+    company: "Infomate (Pvt) Ltd – John Keells Holdings Colombo, Western Province, Sri Lanka",
+    period: "Jul 2022 - Jun 2023 | Full-time | Hybrid",
+    description: "Processed vendor invoices with a strong focus on accuracy and timely payment while managing multilingual purchase orders and invoices in Swedish, Norwegian, Spanish, and Finnish. Collaborated closely with internal teams and external vendors to resolve discrepancies efficiently, maintaining high levels of accuracy and meeting tight deadlines in a fast-paced environment."
   }
 ];
 

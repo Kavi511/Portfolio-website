@@ -49,8 +49,7 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
     <span className={`font-mono ${className}`}>
       <span className="text-green-500 dark:text-green-400">{prompt}</span>
       <span className="text-slate-700 dark:text-slate-300">{displayedText}</span>
-      <span className={`text-green-500 dark:text-green-400 ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`}>
-        ▊
+      <span className={`text-green-500 dark:text-green-400 ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
       </span>
     </span>
   );

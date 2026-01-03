@@ -59,8 +59,7 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
       title: '',
       description: '',
       techStack: [],
-      githubUrl: '',
-      liveUrl: ''
+      githubUrl: ''
     }]);
   };
 
@@ -475,25 +474,14 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                           className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                         />
                       </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">GitHub URL</label>
-                          <input
-                            type="url"
-                            value={project.githubUrl || ''}
-                            onChange={(e) => updateProject(project.id, 'githubUrl', e.target.value)}
-                            className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Live URL</label>
-                          <input
-                            type="url"
-                            value={project.liveUrl || ''}
-                            onChange={(e) => updateProject(project.id, 'liveUrl', e.target.value)}
-                            className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                          />
-                        </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">GitHub URL</label>
+                        <input
+                          type="url"
+                          value={project.githubUrl || ''}
+                          onChange={(e) => updateProject(project.id, 'githubUrl', e.target.value)}
+                          className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        />
                       </div>
                     </div>
                   </div>

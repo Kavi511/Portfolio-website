@@ -45,7 +45,7 @@ const Experience: React.FC = () => {
                     </div>
                     <h4 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors mb-1">{exp.role}</h4>
                     <p className="text-green-500 dark:text-green-400 font-medium mb-4">{exp.company}</p>
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm text-justify" style={{ textAlignLast: 'left', wordSpacing: '0.05em', letterSpacing: '0.01em' }}>
                       {exp.description}
                     </p>
                   </div>

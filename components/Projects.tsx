@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github } from 'lucide-react';
 import { useSiteData } from '../contexts/SiteDataContext';
 
 const Projects: React.FC = () => {
@@ -57,12 +57,6 @@ const Projects: React.FC = () => {
                     <a href={project.githubUrl} className="text-slate-600 dark:text-slate-400 hover:text-green-500 dark:hover:text-white transition-colors duration-300 flex items-center text-sm font-medium">
                       <Github size={18} className="mr-2" />
                       Code
-                    </a>
-                  )}
-                  {project.liveUrl && (
-                    <a href={project.liveUrl} className="text-slate-600 dark:text-slate-400 hover:text-green-500 dark:hover:text-white transition-colors duration-300 flex items-center text-sm font-medium">
-                      <ExternalLink size={18} className="mr-2" />
-                      Live Demo
                     </a>
                   )}
                 </div>

@@ -84,12 +84,19 @@ const getInitialData = (): SiteData => {
   
   if (stored) {
     // Merge stored data with defaults to ensure new fields are included
+    // For experiences, always use defaults for experiences that exist in defaults (to get updates)
+    // Keep any additional stored experiences that don't exist in defaults
+    const defaultExpIds = new Set(defaults.experiences.map(exp => exp.id));
+    const additionalStored = stored.experiences?.filter((storedExp: Experience) => 
+      !defaultExpIds.has(storedExp.id)
+    ) || [];
+    
     // For skillCategories, always use defaults to ensure consistency with code updates
     // User can edit via Admin portal if needed
     return {
       personalInfo: { ...defaults.personalInfo, ...stored.personalInfo },
       professionalSummary: { ...defaults.professionalSummary, ...stored.professionalSummary },
-      experiences: stored.experiences || defaults.experiences,
+      experiences: [...defaults.experiences, ...additionalStored],
       skillCategories: defaults.skillCategories,
       projects: stored.projects || defaults.projects,
     };
