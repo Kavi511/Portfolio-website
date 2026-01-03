@@ -11,6 +11,8 @@ import Projects from './components/Projects';
 import Certifications from './components/Certifications';
 import Admin from './components/Admin';
 import Login from './components/Login';
+import PrivacyModal from './components/PrivacyModal';
+import TermsModal from './components/TermsModal';
 import BackgroundParticles from './components/BackgroundParticles';
 import { Mail, Phone, Linkedin, Github } from 'lucide-react';
 
@@ -20,6 +22,8 @@ function AppContent() {
     // Check if user is already authenticated in this session
     return sessionStorage.getItem('admin_authenticated') === 'true';
   });
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const { siteData } = useSiteData();
 
   const handleLogin = () => {
@@ -151,14 +155,28 @@ function AppContent() {
                 </p>
 
                 <div className="flex space-x-6 text-sm">
-                  <a href="#" className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">Privacy</a>
-                  <a href="#" className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">Terms</a>
+                  <button 
+                    onClick={() => setShowPrivacy(true)}
+                    className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+                  >
+                    Privacy
+                  </button>
+                  <button 
+                    onClick={() => setShowTerms(true)}
+                    className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+                  >
+                    Terms
+                  </button>
                 </div>
               </div>
             </div>
           </footer>
         </div>
       )}
+      
+      {/* Modals */}
+      <PrivacyModal isOpen={showPrivacy} onClose={() => setShowPrivacy(false)} />
+      <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
     </>
   );
 }

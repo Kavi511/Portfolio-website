@@ -137,6 +137,7 @@ export const SKILL_CATEGORIES: (SkillCategory & { icon: React.ReactNode })[] = [
     skills: [
       "PostgreSQL",
       "MySQL",
+      "MongoDB Atlas",
       "Kubernetes (Fundamentals)"
     ]
   },
