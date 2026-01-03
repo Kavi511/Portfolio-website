@@ -65,14 +65,14 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
 
   if (!hasStarted) {
     return (
-      <span className="font-mono text-white">
+      <span className="font-mono text-green-500 dark:text-green-400">
         {showCursorProp && <span className="opacity-0 inline-block w-0.5 h-4 align-middle bg-current"></span>}
       </span>
     );
   }
 
   return (
-    <span className="font-mono text-white">
+    <span className="font-mono text-green-500 dark:text-green-400">
       {displayedText}
       {showCursorProp && (
         <span className={`ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
@@ -93,6 +93,7 @@ const About: React.FC = () => {
   ];
 
   const [currentHelloIndex, setCurrentHelloIndex] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,6 +101,14 @@ const About: React.FC = () => {
     }, 2000); // Change every 2 seconds
 
     return () => clearInterval(interval);
+  }, []);
+
+  // Realistic cursor blink animation
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530); // Realistic terminal cursor blink timing
+    return () => clearInterval(cursorInterval);
   }, []);
 
   const aboutText = [
@@ -200,7 +209,7 @@ const About: React.FC = () => {
               {/* Command Prompt Cursor */}
               <div className="pt-4">
                 <span className="text-white">C:\Users\Kavishka&gt;</span>
-                <span className="text-white ml-0.5 inline-block w-0.5 h-4 align-middle animate-pulse bg-current"></span>
+                <span className={`text-white ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150 bg-current`}></span>
               </div>
             </div>
           </div>

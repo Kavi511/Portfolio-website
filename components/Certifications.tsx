@@ -47,7 +47,7 @@ const Certifications: React.FC = () => {
                   )}
                 </div>
                 
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors duration-300">
+                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
                   {cert.name}
                 </h4>
                 

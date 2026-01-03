@@ -29,7 +29,8 @@ export const PERSONAL_INFO = {
   linkedin: "https://www.linkedin.com/in/kavishka-herath-2ab2b3245/",
   medium: "https://medium.com/@kavishkacherath",
   x: "https://x.com/herath_kavishka",
-  strava: ""
+  strava: "",
+  cvUrl: "/cv.pdf"
 };
 
 export const PROFESSIONAL_SUMMARY = {

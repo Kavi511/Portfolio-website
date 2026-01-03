@@ -23,15 +23,25 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
+  const [showCursorAfterComplete, setShowCursorAfterComplete] = useState(true);
 
-  // Blinking cursor animation
+  // Blinking cursor animation during typing
   useEffect(() => {
-    if (!showCursorProp) return;
+    if (!showCursorProp || isComplete) return;
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
     }, 530);
     return () => clearInterval(cursorInterval);
-  }, [showCursorProp]);
+  }, [showCursorProp, isComplete]);
+
+  // Blinking cursor animation after completion
+  useEffect(() => {
+    if (!showCursorAfterCompleteProp || !isComplete) return;
+    const cursorInterval = setInterval(() => {
+      setShowCursorAfterComplete(prev => !prev);
+    }, 530);
+    return () => clearInterval(cursorInterval);
+  }, [showCursorAfterCompleteProp, isComplete]);
 
   // Typing animation
   useEffect(() => {
@@ -54,12 +64,12 @@ const TerminalTypingText: React.FC<TerminalTypingTextProps> = ({
     <span className={`font-mono ${className}`}>
       <span className="text-slate-900 dark:text-white">{prompt}</span>
       <span className="text-slate-700 dark:text-slate-300">{displayedText}</span>
-      {showCursorProp && (
-        <span className={`text-slate-900 dark:text-white ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
+      {showCursorProp && !isComplete && (
+        <span className={`inline-block ml-0.5 w-[2px] h-4 align-middle bg-slate-900 dark:bg-white ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150`}>
         </span>
       )}
-      {!showCursorProp && isComplete && showCursorAfterCompleteProp && (
-        <span className="text-slate-900 dark:text-white ml-0.5 inline-block w-0.5 h-4 align-middle animate-pulse bg-current">
+      {isComplete && showCursorAfterCompleteProp && (
+        <span className={`inline-block ml-0.5 w-[2px] h-4 align-middle bg-slate-900 dark:bg-white ${showCursorAfterComplete ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150`}>
         </span>
       )}
     </span>

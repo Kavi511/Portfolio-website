@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../contexts/SiteDataContext';
-import { Save, X, Plus, Trash2, Home, RotateCcw } from 'lucide-react';
+import { Save, X, Plus, Trash2, Home, RotateCcw, Download } from 'lucide-react';
 import { Experience, SkillCategory, Project, Certification } from '../types';
 
 interface AdminProps {
@@ -298,6 +298,54 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                     onChange={(e) => setPersonalInfo({ ...personalInfo, strava: e.target.value })}
                     className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">CV File</label>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={personalInfo.cvUrl || ""}
+                      onChange={(e) => setPersonalInfo({ ...personalInfo, cvUrl: e.target.value })}
+                      placeholder="/cv.pdf or https://example.com/cv.pdf"
+                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    />
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            // For client-side only: store as data URL or path
+                            // In a real app, you'd upload to a server
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              // Store the file name/path
+                              // Note: In a real app, you'd upload this to a server
+                              const fileName = file.name;
+                              // For now, we'll just use the file name
+                              // User needs to place the file in the public folder
+                              setPersonalInfo({ ...personalInfo, cvUrl: `/${fileName}` });
+                              alert(`File selected: ${fileName}\n\nPlease ensure this file is placed in the public folder of your project.\nThe CV URL has been set to: /${fileName}`);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                        id="cv-upload"
+                      />
+                      <label
+                        htmlFor="cv-upload"
+                        className="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors cursor-pointer"
+                      >
+                        <Download size={18} className="mr-2" />
+                        Upload PDF CV
+                      </label>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Enter a path (e.g., /cv.pdf) or upload a PDF file. If uploading, place the file in the public folder.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

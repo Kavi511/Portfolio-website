@@ -66,14 +66,14 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
 
   if (!hasStarted) {
     return (
-      <span className="font-mono text-white">
+      <span className="font-mono text-green-500 dark:text-green-400">
         {showCursorProp && <span className="opacity-0 inline-block w-0.5 h-4 align-middle bg-current"></span>}
       </span>
     );
   }
 
   return (
-    <span className="font-mono text-white">
+    <span className="font-mono text-green-500 dark:text-green-400">
       {displayedText}
       {showCursorProp && (
         <span className={`ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
@@ -86,6 +86,15 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
 const Skills: React.FC = () => {
   const { siteData } = useSiteData();
   const SKILL_CATEGORIES = siteData.skillCategories;
+  const [showCursor, setShowCursor] = useState(true);
+
+  // Realistic cursor blink animation
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530); // Realistic terminal cursor blink timing
+    return () => clearInterval(cursorInterval);
+  }, []);
 
   return (
     <section id="skills" className="py-24 relative">
@@ -163,7 +172,7 @@ const Skills: React.FC = () => {
                         const skillDelay = skillsStartDelay + (skillIdx * 800);
                         return (
                           <div key={skill} className="flex items-start space-x-2">
-                            <span className="text-white">•</span>
+                            <span className="text-green-500 dark:text-green-400">•</span>
                             <div className="flex-1">
                               <TerminalTyping 
                                 text={skill}
@@ -180,7 +189,7 @@ const Skills: React.FC = () => {
                     {/* Command Prompt Cursor */}
                     <div className="pt-2 mt-auto">
                       <span className="text-white">C:\Users\Kavishka&gt;</span>
-                      <span className="text-white ml-0.5 inline-block w-0.5 h-4 align-middle animate-pulse bg-current"></span>
+                      <span className={`text-white ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150 bg-current`}></span>
                     </div>
                   </div>
                 </div>

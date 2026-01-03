@@ -16,6 +16,7 @@ interface PersonalInfo {
   medium: string;
   x: string;
   strava: string;
+  cvUrl: string;
 }
 
 interface ProfessionalSummary {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Send } from 'lucide-react';
+import { Download, Mail, MapPin } from 'lucide-react';
 import { useSiteData } from '../contexts/SiteDataContext';
 import TypingText from './TypingText';
 import TerminalTypingText from './TerminalTypingText';
@@ -86,7 +86,7 @@ const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-lg mb-12 leading-relaxed max-w-2xl min-h-[3em]"
+                className="text-lg mb-6 leading-relaxed max-w-2xl min-h-[3em]"
               >
                 <TerminalTypingText 
                   text={PERSONAL_INFO.tagline}
@@ -99,6 +99,18 @@ const Hero: React.FC = () => {
               </motion.p>
             )}
 
+            {showTagline && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="flex items-center gap-2 mb-12 text-slate-600 dark:text-slate-400"
+              >
+                <MapPin size={18} className="text-green-500 dark:text-green-400" />
+                <span className="text-base">{PERSONAL_INFO.location}</span>
+              </motion.div>
+            )}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -109,12 +121,13 @@ const Hero: React.FC = () => {
                 href="#footer"
                 className="flex items-center justify-center px-8 py-4 bg-green-500 text-white dark:bg-white dark:text-slate-900 rounded-xl font-bold hover:bg-green-600 dark:hover:bg-slate-200 transition-all group shadow-lg shadow-green-500/20 dark:shadow-none"
               >
-                Get In Touch
-                <Send className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                Contact Me
+                <Mail className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
-                href="/cv.pdf"
+                href={PERSONAL_INFO.cvUrl || "/cv.pdf"}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center px-8 py-4 bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 transition-all group"
               >
                 Download CV
