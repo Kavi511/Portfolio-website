@@ -36,8 +36,8 @@ const BackgroundParticles: React.FC = () => {
         this.x = Math.random() * canvas!.width;
         this.y = Math.random() * canvas!.height;
         this.size = Math.random() * 1.2 + 0.3;
-        this.vx = (Math.random() - 0.5) * 0.4;
-        this.vy = (Math.random() - 0.5) * 0.4;
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = (Math.random() - 0.5) * 0.8;
       }
 
       update() {
@@ -123,7 +123,7 @@ const BackgroundParticles: React.FC = () => {
           scale: [1, 1.1, 1],
         }}
         transition={{
-          duration: 20,
+          duration: 10,
           repeat: Infinity,
           ease: "linear",
         }}
@@ -138,7 +138,7 @@ const BackgroundParticles: React.FC = () => {
           scale: [1, 1.05, 1],
         }}
         transition={{
-          duration: 25,
+          duration: 12.5,
           repeat: Infinity,
           ease: "linear",
         }}

@@ -52,7 +52,7 @@ const Projects: React.FC = () => {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-slate-600 dark:text-slate-400 dark:hover:text-green-400 hover:bg-slate-100 dark:hover:bg-green-500/20 rounded-lg transition-all duration-300"
+                        className="p-2 text-slate-600 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 rounded-lg transition-all duration-300"
                         aria-label="View code on GitHub"
                       >
                         <Github size={20} />
