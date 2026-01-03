@@ -167,15 +167,15 @@ export const PROJECTS: Project[] = [
     description: "Self-healing microservices architecture deployed on a managed K8s cluster with persistent storage and monitoring.",
     techStack: ["K8s", "Docker", "Helm", "Prometheus"],
     githubUrl: "#",
-    imageUrl: "/Pic01.jpg"
+    imageUrl: "/6877c771def8830380a19f13_Kubernetes_1-e1490380003654.jpeg"
   },
   {
     id: 'p3',
-    title: "Automated CI/CD Pipeline",
-    description: "Streamlined deployment process from Git push to production using GitHub Actions, including automated testing and linting.",
-    techStack: ["GitHub Actions", "Node.js", "Docker Hub"],
+    title: "Dockerize an Application",
+    description: "Containerized a simple web application by creating a Docker image to ensure consistent environments across development and deployment. The project focuses on writing an optimized Dockerfile, managing application dependencies, and running the application in isolated containers for easy setup and scalability.",
+    techStack: ["Docker", "Linux", "Git", "Web Application (Node.js / Python)"],
     githubUrl: "#",
-    imageUrl: "/65cc64ccf4d8c00e62037645_64d3cfa4ca7fe84ad2aa8f4b_blog-post1.jpeg"
+    imageUrl: "/dockerize-windows-app.png"
   }
 ];
 
