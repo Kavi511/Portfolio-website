@@ -28,15 +28,22 @@ const Projects: React.FC = () => {
               transition={{ delay: idx * 0.1 }}
               className="group glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 hover:border-green-500/20 transition-all flex flex-col h-full"
             >
-              <div className="h-48 relative overflow-hidden bg-slate-200 dark:bg-slate-800 transition-colors duration-300">
-                <div className="absolute inset-0 opacity-20 group-hover:scale-110 transition-transform duration-700">
-                   <img 
-                     src={`https://picsum.photos/seed/${project.id}/600/400`} 
-                     alt={project.title}
-                     className="w-full h-full object-cover"
-                   />
+              {project.imageUrl && (
+                <div className="h-48 relative overflow-hidden bg-slate-200 dark:bg-slate-800 transition-colors duration-300">
+                  <img 
+                    src={project.imageUrl} 
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                    style={{
+                      objectPosition: project.title === "AWS Multi-Tier Infrastructure" ? "center 35%" : "center"
+                    }}
+                    onError={(e) => {
+                      console.error('Image failed to load:', project.imageUrl);
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
                 </div>
-              </div>
+              )}
 
               <div className="p-8 flex flex-col flex-grow">
                 <div className="flex flex-wrap gap-2 mb-4">

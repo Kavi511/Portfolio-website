@@ -15,6 +15,7 @@ interface PersonalInfo {
   linkedin: string;
   medium: string;
   x: string;
+  strava: string;
 }
 
 interface ProfessionalSummary {
@@ -96,12 +97,18 @@ const getInitialData = (): SiteData => {
     
     // For skillCategories, always use defaults to ensure consistency with code updates
     // User can edit via Admin portal if needed
+    // For projects, merge stored with defaults to ensure new fields (like imageUrl) are included
+    const mergedProjects = stored.projects ? stored.projects.map((storedProject: Project) => {
+      const defaultProject = defaults.projects.find((p: Project) => p.id === storedProject.id);
+      return defaultProject ? { ...defaultProject, ...storedProject } : storedProject;
+    }) : defaults.projects;
+    
     return {
       personalInfo: { ...defaults.personalInfo, ...stored.personalInfo },
       professionalSummary: { ...defaults.professionalSummary, ...stored.professionalSummary },
       experiences: [...defaults.experiences, ...additionalStored],
       skillCategories: defaults.skillCategories,
-      projects: stored.projects || defaults.projects,
+      projects: mergedProjects,
       certifications: stored.certifications || defaults.certifications,
     };
   }

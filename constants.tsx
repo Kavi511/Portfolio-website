@@ -28,7 +28,8 @@ export const PERSONAL_INFO = {
   github: "https://github.com/Kavi511",
   linkedin: "https://www.linkedin.com/in/kavishka-herath-2ab2b3245/",
   medium: "https://medium.com/@kavishkacherath",
-  x: "https://x.com/herath_kavishka"
+  x: "https://x.com/herath_kavishka",
+  strava: ""
 };
 
 export const PROFESSIONAL_SUMMARY = {
@@ -155,21 +156,24 @@ export const PROJECTS: Project[] = [
     title: "AWS Multi-Tier Infrastructure",
     description: "Fully automated VPC setup with public/private subnets, load balancers, and auto-scaling groups using Terraform.",
     techStack: ["Terraform", "AWS", "Bash"],
-    githubUrl: "#"
+    githubUrl: "#",
+    imageUrl: "/h9Ec3oA2XWnXSQVuah-xg.jpg"
   },
   {
     id: 'p2',
     title: "Kubernetes Cluster Deployment",
     description: "Self-healing microservices architecture deployed on a managed K8s cluster with persistent storage and monitoring.",
     techStack: ["K8s", "Docker", "Helm", "Prometheus"],
-    githubUrl: "#"
+    githubUrl: "#",
+    imageUrl: "/Pic01.jpg"
   },
   {
     id: 'p3',
     title: "Automated CI/CD Pipeline",
     description: "Streamlined deployment process from Git push to production using GitHub Actions, including automated testing and linting.",
     techStack: ["GitHub Actions", "Node.js", "Docker Hub"],
-    githubUrl: "#"
+    githubUrl: "#",
+    imageUrl: "/Gemini_Generated_Image_3661ag3661ag3661.png"
   }
 ];
 

@@ -19,6 +19,7 @@ export interface Project {
   techStack: string[];
   githubUrl?: string;
   liveUrl?: string;
+  imageUrl?: string;
 }
 
 export interface Certification {

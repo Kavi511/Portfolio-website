@@ -111,6 +111,18 @@ function AppContent() {
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                       </svg>
                     </a>
+                    <a 
+                      href={siteData.personalInfo.strava || "#"} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-[#FC4C02] dark:hover:text-[#FC4C02] hover:border-[#FC4C02]/30 shadow-sm dark:shadow-none transition-all"
+                      aria-label="Strava"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M120 288L232 56l112 232h-72l-40-96-40 96z" fill="currentColor"/>
+                        <path d="M280 288l32 72 32-72h48l-80 168-80-168z" fill="currentColor" opacity="0.8"/>
+                      </svg>
+                    </a>
                   </div>
               </div>
 
