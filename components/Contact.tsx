@@ -65,7 +65,7 @@ const Contact: React.FC = () => {
                 href={PERSONAL_INFO.github} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-white dark:hover:text-white hover:border-white/20 shadow-sm dark:shadow-none transition-all"
+                className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-900/30 dark:hover:border-white/20 shadow-sm dark:shadow-none transition-all"
                 aria-label="GitHub"
               >
                 <Github size={22} />
@@ -85,7 +85,7 @@ const Contact: React.FC = () => {
                 href={PERSONAL_INFO.x} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-white dark:hover:text-white hover:border-white/20 shadow-sm dark:shadow-none transition-all"
+                className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-900/30 dark:hover:border-white/20 shadow-sm dark:shadow-none transition-all"
                 aria-label="X (Twitter)"
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">

@@ -57,9 +57,7 @@ const Skills: React.FC = () => {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative"
             >
-              <div className="relative h-full bg-white dark:bg-slate-900/50 rounded-3xl p-8 border border-slate-200 dark:border-white/10 hover:border-green-500/50 transition-all duration-300 shadow-lg dark:shadow-2xl hover:shadow-2xl dark:hover:shadow-green-500/10 hover:-translate-y-2">
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/0 group-hover:from-green-500/5 group-hover:to-transparent rounded-3xl transition-all duration-300 pointer-events-none" />
+              <div className="relative h-full bg-white dark:bg-slate-900/50 rounded-3xl p-8 border border-slate-200 dark:border-white/10 hover:border-green-500/50 transition-all duration-300 shadow-lg dark:shadow-2xl hover:shadow-2xl hover:-translate-y-2">
                 
                 {/* Icon Section */}
                 <div className="flex items-start justify-between mb-6 relative z-10">
@@ -95,9 +93,6 @@ const Skills: React.FC = () => {
                     </motion.div>
                   ))}
                 </div>
-
-                {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500/0 via-green-500/50 to-green-500/0 rounded-b-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </motion.div>
           ))}
