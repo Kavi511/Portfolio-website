@@ -8,11 +8,10 @@ interface AdminProps {
 }
 
 const Admin: React.FC<AdminProps> = ({ onClose }) => {
-  const { siteData, updatePersonalInfo, updateProfessionalSummary, updateExperiences, updateSkillCategories, updateProjects, updateCertifications, resetToDefaults } = useSiteData();
-  const [activeTab, setActiveTab] = useState<'personal' | 'summary' | 'experience' | 'skills' | 'projects' | 'certifications'>('personal');
+  const { siteData, updatePersonalInfo, updateExperiences, updateSkillCategories, updateProjects, updateCertifications, resetToDefaults } = useSiteData();
+  const [activeTab, setActiveTab] = useState<'personal' | 'experience' | 'skills' | 'projects' | 'certifications'>('personal');
 
   const [personalInfo, setPersonalInfo] = useState(siteData.personalInfo);
-  const [professionalSummary, setProfessionalSummary] = useState(siteData.professionalSummary);
   const [experiences, setExperiences] = useState(siteData.experiences);
   const [skillCategories, setSkillCategories] = useState(siteData.skillCategories);
   const [projects, setProjects] = useState(siteData.projects);
@@ -20,7 +19,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
 
   const handleSave = () => {
     updatePersonalInfo(personalInfo);
-    updateProfessionalSummary(professionalSummary);
     updateExperiences(experiences);
     updateSkillCategories(skillCategories);
     updateProjects(projects);
@@ -114,7 +112,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
 
   const tabs = [
     { id: 'personal', label: 'Personal Info' },
-    { id: 'summary', label: 'Professional Summary' },
     { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
@@ -302,43 +299,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                     className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Professional Summary Tab */}
-          {activeTab === 'summary' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Professional Summary</h2>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title</label>
-                <input
-                  type="text"
-                  value={professionalSummary.title}
-                  onChange={(e) => setProfessionalSummary({ ...professionalSummary, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Description</label>
-                <textarea
-                  value={professionalSummary.description}
-                  onChange={(e) => setProfessionalSummary({ ...professionalSummary, description: e.target.value })}
-                  rows={4}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Highlights (one per line)</label>
-                <textarea
-                  value={professionalSummary.highlights.join('\n')}
-                  onChange={(e) => setProfessionalSummary({ ...professionalSummary, highlights: e.target.value.split('\n').filter(h => h.trim()) })}
-                  rows={5}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                />
               </div>
             </div>
           )}

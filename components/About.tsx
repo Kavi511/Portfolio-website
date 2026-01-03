@@ -179,18 +179,20 @@ const About: React.FC = () => {
               </div>
               
               {/* About Text Output with Typing Animation */}
-              <div className="space-y-1 pt-2 text-justify" style={{ textAlignLast: 'left', wordSpacing: '0.05em', letterSpacing: '0.01em' }}>
+              <div className="pt-2 text-justify" style={{ textAlignLast: 'left', wordSpacing: '0.05em', letterSpacing: '0.01em', lineHeight: '1.8' }}>
                 {aboutText.map((line, lineIdx) => {
                   const lineDelay = 2000 + (lineIdx * 1500);
+                  const isLastLine = lineIdx === aboutText.length - 1;
                   return (
-                    <div key={lineIdx} className="flex items-start">
+                    <span key={lineIdx}>
                       <TerminalTyping 
-                        text={line}
+                        text={lineIdx === 0 ? line : ' ' + line}
                         speed={30}
                         delay={lineDelay}
                         showCursor={false}
                       />
-                    </div>
+                      {!isLastLine && <span className="inline-block w-0"></span>}
+                    </span>
                   );
                 })}
               </div>

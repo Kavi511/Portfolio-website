@@ -19,8 +19,28 @@ const Experience: React.FC = () => {
         </div>
 
         <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 transform -translate-x-px h-full w-0.5 bg-slate-200 dark:bg-slate-800"></div>
+          {/* Ladder Design - Two Vertical Rails */}
+          <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 h-full w-20">
+            {/* Left Rail */}
+            <div className="absolute left-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            {/* Right Rail */}
+            <div className="absolute right-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            
+            {/* Additional Rungs - Add more rungs throughout the ladder */}
+            {Array.from({ length: 15 }).map((_, rungIndex) => {
+              const rungPosition = ((rungIndex + 1) * 100) / 16; // Distribute rungs evenly
+              return (
+                <div
+                  key={`rung-${rungIndex}`}
+                  className="absolute left-0 w-20 h-1 bg-green-500/50 dark:bg-green-400/50 z-5 rounded-full"
+                  style={{ 
+                    top: `${rungPosition}%`, 
+                    transform: 'translateY(-50%)' 
+                  }}
+                ></div>
+              );
+            })}
+          </div>
 
           <div className="space-y-12">
             {EXPERIENCES.map((exp, index) => (
@@ -34,8 +54,17 @@ const Experience: React.FC = () => {
                   index % 2 === 0 ? 'md:flex-row-reverse' : ''
                 }`}
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-10"></div>
+                {/* Main Ladder Rung - Horizontal bar connecting the two rails at experience point */}
+                <div 
+                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-20 h-2 bg-green-500 dark:bg-green-400 z-10 rounded-full"
+                  style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
+                ></div>
+                
+                {/* Timeline Dot on Rung */}
+                <div 
+                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-20 border-2 border-slate-50 dark:border-slate-900" 
+                  style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
+                ></div>
 
                 {/* Content Card */}
                 <div className="ml-8 md:ml-0 md:w-[45%]">

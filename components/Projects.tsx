@@ -29,7 +29,7 @@ const Projects: React.FC = () => {
               className="group glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5 hover:border-green-500/20 transition-all flex flex-col h-full"
             >
               {project.imageUrl && (
-                <div className="h-48 relative overflow-hidden bg-slate-200 dark:bg-slate-800 transition-colors duration-300">
+                <div className="h-80 relative overflow-hidden bg-slate-200 dark:bg-slate-800 transition-colors duration-300">
                   <img 
                     src={project.imageUrl} 
                     alt={project.title}
@@ -54,7 +54,7 @@ const Projects: React.FC = () => {
                   ))}
                 </div>
                 
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors duration-300">
+                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors duration-300">
                   {project.title}
                 </h4>
                 

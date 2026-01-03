@@ -98,9 +98,13 @@ const getInitialData = (): SiteData => {
     // For skillCategories, always use defaults to ensure consistency with code updates
     // User can edit via Admin portal if needed
     // For projects, merge stored with defaults to ensure new fields (like imageUrl) are included
+    // Always prefer default imageUrl to ensure latest images are used
     const mergedProjects = stored.projects ? stored.projects.map((storedProject: Project) => {
       const defaultProject = defaults.projects.find((p: Project) => p.id === storedProject.id);
-      return defaultProject ? { ...defaultProject, ...storedProject } : storedProject;
+      if (defaultProject) {
+        return { ...defaultProject, ...storedProject, imageUrl: defaultProject.imageUrl || storedProject.imageUrl };
+      }
+      return storedProject;
     }) : defaults.projects;
     
     return {

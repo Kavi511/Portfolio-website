@@ -173,7 +173,7 @@ export const PROJECTS: Project[] = [
     description: "Streamlined deployment process from Git push to production using GitHub Actions, including automated testing and linting.",
     techStack: ["GitHub Actions", "Node.js", "Docker Hub"],
     githubUrl: "#",
-    imageUrl: "/Gemini_Generated_Image_3661ag3661ag3661.png"
+    imageUrl: "/65cc64ccf4d8c00e62037645_64d3cfa4ca7fe84ad2aa8f4b_blog-post1.jpeg"
   }
 ];
 

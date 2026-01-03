@@ -37,11 +37,11 @@ function AppContent() {
 
           <footer id="footer" className="py-16 border-t border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-black/50 backdrop-blur-sm relative z-10 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Get In Touch Section */}
+              {/* Contact Me Section */}
               <div className="mb-12">
                 <div className="space-y-4 mb-8">
                   <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest">Connectivity</h3>
-                  <h2 className="text-4xl font-bold text-slate-900 dark:text-white leading-tight">Get In Touch</h2>
+                  <h2 className="text-4xl font-bold text-slate-900 dark:text-white leading-tight">Contact Me</h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
