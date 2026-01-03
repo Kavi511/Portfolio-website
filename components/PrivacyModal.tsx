@@ -47,14 +47,8 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
               {/* Content */}
               <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
                 <div className="prose prose-slate dark:prose-invert max-w-none">
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                    This website is a personal portfolio created to showcase projects and skills.
-                  </p>
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                    Any information you provide through contact forms (such as your name or email address) will be used only to respond to your message and will not be shared, sold, or stored for marketing purposes.
-                  </p>
                   <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                    This site does not knowingly collect sensitive personal data.
+                    This website is a personal portfolio created to showcase projects and skills. Any information you provide through contact forms (such as your name or email address) will be used only to respond to your message and will not be shared, sold, or stored for marketing purposes. This site does not knowingly collect sensitive personal data.
                   </p>
                 </div>
               </div>

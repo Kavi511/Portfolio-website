@@ -47,17 +47,8 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
               {/* Content */}
               <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
                 <div className="prose prose-slate dark:prose-invert max-w-none">
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                    This website is provided for informational and personal showcase purposes only.
-                  </p>
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                    All content, including text, designs, and projects, belongs to the site owner unless otherwise stated.
-                  </p>
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                    You may view and share the content for personal, non-commercial use.
-                  </p>
                   <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                    The site owner is not responsible for any misuse of the information provided on this website.
+                    This website is provided for informational and personal showcase purposes only. All content, including text, designs, and projects, belongs to the site owner unless otherwise stated. You may view and share the content for personal, non-commercial use. The site owner is not responsible for any misuse of the information provided on this website.
                   </p>
                 </div>
               </div>
