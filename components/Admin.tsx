@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSiteData } from '../contexts/SiteDataContext';
 import { Save, X, Plus, Trash2, Home, RotateCcw, Download } from 'lucide-react';
 import { Experience, SkillCategory, Project, Certification } from '../types';
+import BackgroundParticles from './BackgroundParticles';
 
 interface AdminProps {
   onClose: () => void;
@@ -119,8 +120,9 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-black p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-slate-50 dark:bg-black p-4 relative">
+      <BackgroundParticles />
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg p-6 mb-6">
           <div className="flex items-center justify-between">
@@ -144,7 +146,10 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                 Save Changes
               </button>
               <button
-                onClick={onClose}
+                onClick={() => {
+                  sessionStorage.removeItem('admin_authenticated');
+                  onClose();
+                }}
                 className="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors flex items-center gap-2"
               >
                 <Home size={18} />

@@ -10,17 +10,35 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Certifications from './components/Certifications';
 import Admin from './components/Admin';
+import Login from './components/Login';
 import BackgroundParticles from './components/BackgroundParticles';
 import { Mail, Phone, Linkedin, Github } from 'lucide-react';
 
 function AppContent() {
   const [showAdmin, setShowAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Check if user is already authenticated in this session
+    return sessionStorage.getItem('admin_authenticated') === 'true';
+  });
   const { siteData } = useSiteData();
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    setShowAdmin(true);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('admin_authenticated');
+    setIsAuthenticated(false);
+    setShowAdmin(false);
+  };
 
   return (
     <>
-      {showAdmin ? (
-        <Admin onClose={() => setShowAdmin(false)} />
+      {showAdmin && isAuthenticated ? (
+        <Admin onClose={handleLogout} />
+      ) : showAdmin && !isAuthenticated ? (
+        <Login onLogin={handleLogin} />
       ) : (
         <div className="min-h-screen selection:bg-green-500/30 relative transition-colors duration-300">
           <BackgroundParticles />
@@ -57,13 +75,13 @@ function AppContent() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4 p-4 glass-card rounded-2xl border-slate-200 dark:border-white/5 group hover:border-green-500/20 transition-all shadow-sm dark:shadow-none">
-                    <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 dark:text-green-400 group-hover:scale-110 transition-transform">
+                  <div className="flex items-center space-x-4 p-4 glass-card rounded-2xl border-slate-200 dark:border-white/5 group hover:border-red-500/20 transition-all shadow-sm dark:shadow-none">
+                    <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 dark:text-red-400 group-hover:scale-110 transition-transform">
                       <Phone size={22} />
                     </div>
                     <div>
                       <p className="text-xs font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">Phone</p>
-                      <a href={`tel:${siteData.personalInfo.phone.replace(/\s/g, '')}`} className="text-slate-900 dark:text-white font-medium hover:text-green-500 transition-colors text-sm">
+                      <a href={`tel:${siteData.personalInfo.phone.replace(/\s/g, '')}`} className="text-slate-900 dark:text-white font-medium hover:text-red-500 transition-colors text-sm">
                         {siteData.personalInfo.phone}
                       </a>
                     </div>
