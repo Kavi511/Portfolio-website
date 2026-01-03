@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Experience, SkillCategory, Project } from '../types';
+import { Experience, SkillCategory, Project, Certification } from '../types';
 import * as defaultData from '../constants';
 
 interface PersonalInfo {
@@ -29,6 +29,7 @@ interface SiteData {
   experiences: Experience[];
   skillCategories: SkillCategory[];
   projects: Project[];
+  certifications: Certification[];
 }
 
 interface SiteDataContextType {
@@ -38,6 +39,7 @@ interface SiteDataContextType {
   updateExperiences: (experiences: Experience[]) => void;
   updateSkillCategories: (categories: SkillCategory[]) => void;
   updateProjects: (projects: Project[]) => void;
+  updateCertifications: (certifications: Certification[]) => void;
   resetToDefaults: () => void;
   saveToStorage: () => void;
 }
@@ -80,6 +82,7 @@ const getInitialData = (): SiteData => {
     experiences: [...defaultData.EXPERIENCES],
     skillCategories: defaultData.SKILL_CATEGORIES.map(({ icon, ...rest }) => rest),
     projects: [...defaultData.PROJECTS],
+    certifications: [...(defaultData.CERTIFICATIONS || [])],
   };
   
   if (stored) {
@@ -99,6 +102,7 @@ const getInitialData = (): SiteData => {
       experiences: [...defaults.experiences, ...additionalStored],
       skillCategories: defaults.skillCategories,
       projects: stored.projects || defaults.projects,
+      certifications: stored.certifications || defaults.certifications,
     };
   }
   
@@ -138,6 +142,10 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
     setSiteData(prev => ({ ...prev, projects }));
   };
 
+  const updateCertifications = (certifications: Certification[]) => {
+    setSiteData(prev => ({ ...prev, certifications }));
+  };
+
   const resetToDefaults = () => {
     const defaults = {
       personalInfo: { ...defaultData.PERSONAL_INFO },
@@ -145,6 +153,7 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
       experiences: [...defaultData.EXPERIENCES],
       skillCategories: defaultData.SKILL_CATEGORIES.map(({ icon, ...rest }) => rest),
       projects: [...defaultData.PROJECTS],
+      certifications: [...(defaultData.CERTIFICATIONS || [])],
     };
     setSiteData(defaults);
     saveToStorage(defaults);
@@ -179,6 +188,7 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
     updateExperiences,
     updateSkillCategories,
     updateProjects,
+    updateCertifications,
     resetToDefaults,
     saveToStorage: saveToStorageHandler,
   };

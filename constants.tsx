@@ -14,7 +14,7 @@ import {
   Monitor,
   TestTube
 } from 'lucide-react';
-import { Experience, SkillCategory, Project } from './types';
+import { Experience, SkillCategory, Project, Certification } from './types';
 
 export const PERSONAL_INFO = {
   name: "Kavishka Herath",
@@ -171,4 +171,8 @@ export const PROJECTS: Project[] = [
     techStack: ["GitHub Actions", "Node.js", "Docker Hub"],
     githubUrl: "#"
   }
+];
+
+export const CERTIFICATIONS: Certification[] = [
+  // Add your certifications here
 ];

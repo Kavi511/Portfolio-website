@@ -102,7 +102,7 @@ const Hero: React.FC = () => {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a
-                href="#contact"
+                href="#footer"
                 className="flex items-center justify-center px-8 py-4 bg-green-500 text-white dark:bg-white dark:text-slate-900 rounded-xl font-bold hover:bg-green-600 dark:hover:bg-slate-200 transition-all group shadow-lg shadow-green-500/20 dark:shadow-none"
               >
                 Get In Touch

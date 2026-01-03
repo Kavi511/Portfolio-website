@@ -13,6 +13,9 @@ const Experience: React.FC = () => {
         <div className="text-center mb-16 space-y-4">
           <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest">Career Path</h3>
           <h2 className="text-4xl font-bold text-slate-900 dark:text-white">Work Experience</h2>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4">
+            Professional journey showcasing diverse roles and responsibilities across different industries and projects.
+          </p>
         </div>
 
         <div className="relative max-w-4xl mx-auto">

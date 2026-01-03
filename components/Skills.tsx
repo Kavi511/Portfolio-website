@@ -8,13 +8,15 @@ interface TerminalTypingProps {
   speed?: number;
   delay?: number;
   onComplete?: () => void;
+  showCursor?: boolean;
 }
 
 const TerminalTyping: React.FC<TerminalTypingProps> = ({ 
   text, 
   speed = 50, 
   delay = 0,
-  onComplete 
+  onComplete,
+  showCursor: showCursorProp = true
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,11 +38,12 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
 
   // Blinking cursor animation
   useEffect(() => {
+    if (!showCursorProp) return;
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
     }, 530);
     return () => clearInterval(cursorInterval);
-  }, []);
+  }, [showCursorProp]);
 
   // Typing animation
   useEffect(() => {
@@ -64,7 +67,7 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
   if (!hasStarted) {
     return (
       <span className="font-mono text-white">
-        <span className="opacity-0 inline-block w-0.5 h-4 align-middle bg-current"></span>
+        {showCursorProp && <span className="opacity-0 inline-block w-0.5 h-4 align-middle bg-current"></span>}
       </span>
     );
   }
@@ -72,8 +75,10 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
   return (
     <span className="font-mono text-white">
       {displayedText}
-      <span className={`ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
-      </span>
+      {showCursorProp && (
+        <span className={`ml-0.5 inline-block w-0.5 h-4 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75 bg-current`}>
+        </span>
+      )}
     </span>
   );
 };
@@ -95,11 +100,11 @@ const Skills: React.FC = () => {
           <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest mb-2">
             Technical Arsenal
           </h3>
-          <h2 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
             Core Skills
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4">
-            A comprehensive list of the tools and technologies I use to build, deploy, and maintain robust infrastructure.
+            A comprehensive list of the tools and technologies I use to build, deploy and maintain robust infrastructure.
           </p>
         </motion.div>
 
@@ -116,9 +121,9 @@ const Skills: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="relative"
+                className="relative flex flex-col"
               >
-                <div className="bg-[#0C0C0C] border-2 border-[#808080] overflow-hidden shadow-2xl">
+                <div className="bg-[#0C0C0C] border-2 border-[#808080] overflow-hidden shadow-2xl flex flex-col h-full">
                   {/* Windows Command Prompt Title Bar */}
                   <div className="bg-[#C0C0C0] px-2 py-1 border-b-2 border-[#808080] flex items-center justify-between">
                     <div className="flex items-center space-x-1">
@@ -140,7 +145,7 @@ const Skills: React.FC = () => {
                   </div>
                   
                   {/* Command Prompt Content */}
-                  <div className="p-4 font-mono text-sm space-y-2 bg-[#000000] text-white leading-relaxed min-h-[200px]">
+                  <div className="p-4 font-mono text-sm space-y-2 bg-[#000000] text-white leading-relaxed flex-1 flex flex-col min-h-[300px]">
                     {/* Command Prompt */}
                     <div className="flex flex-wrap items-center gap-1">
                       <span className="text-white">C:\Users\Kavishka&gt;</span>
@@ -148,11 +153,12 @@ const Skills: React.FC = () => {
                         text={`list skills --category="${category.name}"`}
                         speed={50}
                         delay={commandDelay}
+                        showCursor={false}
                       />
                     </div>
                     
                     {/* Skills Output with Typing Animation */}
-                    <div className="space-y-1.5 pt-2">
+                    <div className="space-y-1.5 pt-2 flex-1">
                       {category.skills.map((skill, skillIdx) => {
                         const skillDelay = skillsStartDelay + (skillIdx * 800);
                         return (
@@ -163,6 +169,7 @@ const Skills: React.FC = () => {
                                 text={skill}
                                 speed={30}
                                 delay={skillDelay}
+                                showCursor={false}
                               />
                             </div>
                           </div>
@@ -171,7 +178,7 @@ const Skills: React.FC = () => {
                     </div>
                     
                     {/* Command Prompt Cursor */}
-                    <div className="pt-2">
+                    <div className="pt-2 mt-auto">
                       <span className="text-white">C:\Users\Kavishka&gt;</span>
                       <span className="text-white ml-0.5 inline-block w-0.5 h-4 align-middle animate-pulse bg-current"></span>
                     </div>

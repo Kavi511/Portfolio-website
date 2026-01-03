@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../contexts/SiteDataContext';
 import { Save, X, Plus, Trash2, Home, RotateCcw } from 'lucide-react';
-import { Experience, SkillCategory, Project } from '../types';
+import { Experience, SkillCategory, Project, Certification } from '../types';
 
 interface AdminProps {
   onClose: () => void;
 }
 
 const Admin: React.FC<AdminProps> = ({ onClose }) => {
-  const { siteData, updatePersonalInfo, updateProfessionalSummary, updateExperiences, updateSkillCategories, updateProjects, resetToDefaults } = useSiteData();
-  const [activeTab, setActiveTab] = useState<'personal' | 'summary' | 'experience' | 'skills' | 'projects'>('personal');
+  const { siteData, updatePersonalInfo, updateProfessionalSummary, updateExperiences, updateSkillCategories, updateProjects, updateCertifications, resetToDefaults } = useSiteData();
+  const [activeTab, setActiveTab] = useState<'personal' | 'summary' | 'experience' | 'skills' | 'projects' | 'certifications'>('personal');
 
   const [personalInfo, setPersonalInfo] = useState(siteData.personalInfo);
   const [professionalSummary, setProfessionalSummary] = useState(siteData.professionalSummary);
   const [experiences, setExperiences] = useState(siteData.experiences);
   const [skillCategories, setSkillCategories] = useState(siteData.skillCategories);
   const [projects, setProjects] = useState(siteData.projects);
+  const [certifications, setCertifications] = useState(siteData.certifications);
 
   const handleSave = () => {
     updatePersonalInfo(personalInfo);
@@ -23,6 +24,7 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
     updateExperiences(experiences);
     updateSkillCategories(skillCategories);
     updateProjects(projects);
+    updateCertifications(certifications);
     alert('Changes saved successfully! Refresh the page to see updates.');
   };
 
@@ -88,12 +90,35 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
     setSkillCategories(updated);
   };
 
+  const addCertification = () => {
+    setCertifications([...certifications, {
+      id: `cert-${Date.now()}`,
+      name: '',
+      issuer: '',
+      issueDate: '',
+      expiryDate: '',
+      credentialUrl: '',
+      description: ''
+    }]);
+  };
+
+  const removeCertification = (id: string) => {
+    setCertifications(certifications.filter(cert => cert.id !== id));
+  };
+
+  const updateCertification = (id: string, field: keyof Certification, value: any) => {
+    setCertifications(certifications.map(cert => 
+      cert.id === id ? { ...cert, [field]: value } : cert
+    ));
+  };
+
   const tabs = [
     { id: 'personal', label: 'Personal Info' },
     { id: 'summary', label: 'Professional Summary' },
     { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
+    { id: 'certifications', label: 'Certifications' },
   ];
 
   return (
@@ -480,6 +505,99 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                           type="url"
                           value={project.githubUrl || ''}
                           onChange={(e) => updateProject(project.id, 'githubUrl', e.target.value)}
+                          className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Certifications Tab */}
+          {activeTab === 'certifications' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Certifications</h2>
+                <button
+                  onClick={addCertification}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2"
+                >
+                  <Plus size={18} />
+                  Add Certification
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {certifications.map((cert, index) => (
+                  <div key={cert.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Certification #{index + 1}</h3>
+                      <button
+                        onClick={() => removeCertification(cert.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Certification Name</label>
+                        <input
+                          type="text"
+                          value={cert.name}
+                          onChange={(e) => updateCertification(cert.id, 'name', e.target.value)}
+                          className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Issuer</label>
+                        <input
+                          type="text"
+                          value={cert.issuer}
+                          onChange={(e) => updateCertification(cert.id, 'issuer', e.target.value)}
+                          className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Issue Date</label>
+                          <input
+                            type="text"
+                            value={cert.issueDate || ''}
+                            onChange={(e) => updateCertification(cert.id, 'issueDate', e.target.value)}
+                            placeholder="e.g., Jan 2024"
+                            className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expiry Date (Optional)</label>
+                          <input
+                            type="text"
+                            value={cert.expiryDate || ''}
+                            onChange={(e) => updateCertification(cert.id, 'expiryDate', e.target.value)}
+                            placeholder="e.g., Jan 2027"
+                            className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Credential URL (Optional)</label>
+                        <input
+                          type="url"
+                          value={cert.credentialUrl || ''}
+                          onChange={(e) => updateCertification(cert.id, 'credentialUrl', e.target.value)}
+                          placeholder="https://..."
+                          className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Description (Optional)</label>
+                        <textarea
+                          value={cert.description || ''}
+                          onChange={(e) => updateCertification(cert.id, 'description', e.target.value)}
+                          rows={3}
                           className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                         />
                       </div>

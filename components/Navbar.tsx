@@ -26,7 +26,8 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
     { name: 'Experience', href: '#experience' },
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Hire Me', href: '#contact' },
+    { name: 'Certifications', href: '#certifications' },
+    { name: 'Get In Touch', href: '#footer' },
   ];
 
   return (
