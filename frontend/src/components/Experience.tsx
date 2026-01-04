@@ -1,0 +1,94 @@
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Briefcase } from 'lucide-react';
+import { useSiteData } from "@/contexts/SiteDataContext";
+
+const Experience: React.FC = () => {
+  const { siteData } = useSiteData();
+  const EXPERIENCES = siteData.experiences;
+  return (
+    <section id="experience" className="py-24 bg-white/30 dark:bg-slate-950/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16 space-y-4">
+          <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest">Career Path</h3>
+          <h2 className="text-4xl font-bold text-slate-900 dark:text-white">Work Experience</h2>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4">
+            Professional journey showcasing diverse roles and responsibilities across different industries and projects.
+          </p>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto">
+          {/* Ladder Design - Two Vertical Rails */}
+          <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 h-full w-20">
+            {/* Left Rail */}
+            <div className="absolute left-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            {/* Right Rail */}
+            <div className="absolute right-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            
+            {/* Additional Rungs - Add more rungs throughout the ladder */}
+            {Array.from({ length: 15 }).map((_, rungIndex) => {
+              const rungPosition = ((rungIndex + 1) * 100) / 16; // Distribute rungs evenly
+              return (
+                <div
+                  key={`rung-${rungIndex}`}
+                  className="absolute left-0 w-20 h-1 bg-green-500/50 dark:bg-green-400/50 z-5 rounded-full"
+                  style={{ 
+                    top: `${rungPosition}%`, 
+                    transform: 'translateY(-50%)' 
+                  }}
+                ></div>
+              );
+            })}
+          </div>
+
+          <div className="space-y-12">
+            {EXPERIENCES.map((exp, index) => (
+              <motion.div
+                key={exp.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={`relative flex items-center md:justify-between ${
+                  index % 2 === 0 ? 'md:flex-row-reverse' : ''
+                }`}
+              >
+                {/* Main Ladder Rung - Horizontal bar connecting the two rails at experience point */}
+                <div 
+                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-20 h-2 bg-green-500 dark:bg-green-400 z-10 rounded-full"
+                  style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
+                ></div>
+                
+                {/* Timeline Dot on Rung */}
+                <div 
+                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-20 border-2 border-slate-50 dark:border-slate-900" 
+                  style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
+                ></div>
+
+                {/* Content Card */}
+                <div className="ml-8 md:ml-0 md:w-[45%]">
+                  <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-white/5 transition-all group shadow-sm dark:shadow-none">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2 bg-green-500/10 text-green-500 dark:text-green-400 rounded-lg">
+                        <Briefcase size={18} />
+                      </div>
+                      <span className="text-xs font-mono text-slate-400 dark:text-slate-500">{exp.period}</span>
+                    </div>
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white transition-colors mb-1">{exp.role}</h4>
+                    <p className="text-green-500 dark:text-green-400 font-medium mb-4">{exp.company}</p>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm text-justify" style={{ textAlignLast: 'left', wordSpacing: '0.05em', letterSpacing: '0.01em' }}>
+                      {exp.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
