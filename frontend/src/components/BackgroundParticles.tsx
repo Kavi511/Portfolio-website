@@ -13,8 +13,8 @@ const BackgroundParticles: React.FC = () => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    const particleCount = 80; // More particles for better visibility
-    const connectionDistance = 180;
+    const particleCount = 60; // Balanced particle count
+    const connectionDistance = 150;
 
     class Particle {
       x: number;
@@ -26,9 +26,9 @@ const BackgroundParticles: React.FC = () => {
       constructor() {
         this.x = Math.random() * window.innerWidth;
         this.y = Math.random() * window.innerHeight;
-        this.size = Math.random() * 4 + 2; // Even larger particles for visibility
-        this.vx = (Math.random() - 0.5) * 2;
-        this.vy = (Math.random() - 0.5) * 2;
+        this.size = Math.random() * 1.5 + 0.8; // Smaller particles
+        this.vx = (Math.random() - 0.5) * 1.2;
+        this.vy = (Math.random() - 0.5) * 1.2;
       }
 
       update() {
@@ -44,8 +44,8 @@ const BackgroundParticles: React.FC = () => {
         const isDark = document.documentElement.classList.contains('dark');
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Maximum visibility - fully opaque
-        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)';
+        // Slightly transparent for subtle effect
+        ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)';
         ctx.fill();
       }
     }
@@ -89,12 +89,12 @@ const BackgroundParticles: React.FC = () => {
 
           if (dist < connectionDistance) {
             ctx.beginPath();
-            const opacity = isDark ? 0.8 : 0.9;
+            const opacity = isDark ? 0.4 : 0.5;
             const lineOpacity = opacity * (1 - dist / connectionDistance);
             ctx.strokeStyle = isDark 
               ? `rgba(255, 255, 255, ${lineOpacity})`
               : `rgba(0, 0, 0, ${lineOpacity})`;
-            ctx.lineWidth = isDark ? 2 : 2.5;
+            ctx.lineWidth = isDark ? 1 : 1.2;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.stroke();
