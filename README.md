@@ -411,15 +411,6 @@ npm run lint
 
 ISC
 
-## 👤 Author
-
-**Kavishka Herath**
-
-- Portfolio: [Your Portfolio URL]
-- LinkedIn: [Your LinkedIn]
-- GitHub: [@Kavi511](https://github.com/Kavi511)
-- Email: kavishkacherath@gmail.com
-
 ## 🙏 Acknowledgments
 
 - React team for the amazing framework
