@@ -10,6 +10,8 @@
     "build": "echo 'Backend build complete'",
     "seed": "node scripts/seedDatabase.js",
     "test-connection": "node scripts/testConnection.js",
+    "check-personal-info": "node scripts/checkPersonalInfo.js",
+    "upload-cv": "node scripts/uploadCV.js",
     "lint": "echo 'Linting backend...'",
     "test": "echo 'No tests specified'",
     "clean": "rm -rf node_modules dist"

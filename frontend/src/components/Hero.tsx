@@ -11,6 +11,93 @@ const Hero: React.FC = () => {
   const PERSONAL_INFO = siteData.personalInfo;
   const [showRole, setShowRole] = useState(false);
   const [showTagline, setShowTagline] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadCV = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    if (isDownloading) return;
+    
+    setIsDownloading(true);
+    
+    try {
+      // Determine the correct download URL
+      let downloadUrl: string;
+      
+      // Check if we're accessing from network IP (not localhost)
+      const isNetworkAccess = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      
+      // Always use the standard endpoint path (ignore cvUrl from database for internal downloads)
+      const endpointPath = '/api/upload/cv/download';
+      
+      if (PERSONAL_INFO.cvUrl?.startsWith('http')) {
+        // External URL - use as is
+        downloadUrl = PERSONAL_INFO.cvUrl;
+      } else if (isNetworkAccess) {
+        // For network access, construct full URL using current hostname and backend port
+        const backendPort = '5000';
+        downloadUrl = `http://${window.location.hostname}:${backendPort}${endpointPath}`;
+      } else {
+        // Use relative path - Vite proxy will handle it for localhost
+        downloadUrl = endpointPath;
+      }
+      
+      console.log('Downloading CV from:', downloadUrl);
+      console.log('Current hostname:', window.location.hostname);
+      console.log('Is network access:', isNetworkAccess);
+      
+      // Fetch the PDF file
+      const response = await fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/pdf',
+        },
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Download failed:', response.status, errorText);
+        throw new Error(`Failed to download CV: ${response.status} ${response.statusText}`);
+      }
+      
+      // Check if response is actually a PDF
+      const contentType = response.headers.get('content-type');
+      if (contentType && !contentType.includes('application/pdf')) {
+        console.warn('Unexpected content type:', contentType);
+      }
+      
+      // Get the blob
+      const blob = await response.blob();
+      
+      // Verify blob is not empty
+      if (blob.size === 0) {
+        throw new Error('Downloaded file is empty');
+      }
+      
+      console.log('Downloaded blob size:', blob.size, 'bytes');
+      
+      // Create a download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Resume.pdf';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup after a short delay
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    } catch (error: any) {
+      console.error('Error downloading CV:', error);
+      const errorMessage = error.message || 'Unknown error occurred';
+      alert(`Failed to download CV: ${errorMessage}\n\nPlease ensure:\n1. Backend server is running on port 5000\n2. CV file is uploaded to the database\n3. Check browser console for details`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
@@ -112,12 +199,23 @@ const Hero: React.FC = () => {
                 <Mail className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
-                href={PERSONAL_INFO.cvUrl?.startsWith('http') ? PERSONAL_INFO.cvUrl : `${PERSONAL_INFO.cvUrl || "/api/upload/cv/download"}`}
-                download
-                className="flex items-center justify-center px-8 py-4 bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 transition-all group"
+                href={PERSONAL_INFO.cvUrl?.startsWith('http') 
+                  ? PERSONAL_INFO.cvUrl 
+                  : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${PERSONAL_INFO.cvUrl || "/api/upload/cv/download"}`}
+                onClick={handleDownloadCV}
+                className="flex items-center justify-center px-8 py-4 bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 transition-all group cursor-pointer"
               >
-                Download CV
-                <Download className="ml-2 w-4 h-4" />
+                {isDownloading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-slate-900 dark:border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Downloading...
+                  </>
+                ) : (
+                  <>
+                    Download CV
+                    <Download className="ml-2 w-4 h-4" />
+                  </>
+                )}
               </a>
             </motion.div>
           </div>

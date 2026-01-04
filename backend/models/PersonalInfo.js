@@ -23,7 +23,7 @@ const personalInfoSchema = new mongoose.Schema({
   },
   education: {
     type: String,
-    required: true,
+    default: '',
   },
   email: {
     type: String,
@@ -77,7 +77,16 @@ const personalInfoSchema = new mongoose.Schema({
 personalInfoSchema.statics.getPersonalInfo = async function() {
   let info = await this.findOne();
   if (!info) {
-    info = await this.create({});
+    // Create with minimal required fields if document doesn't exist
+    info = await this.create({
+      name: 'Your Name',
+      role: 'Your Role',
+      tagline: 'Your Tagline',
+      about: 'About you',
+      location: 'Your Location',
+      email: 'your@email.com',
+      phone: 'Your Phone',
+    });
   }
   return info;
 };
