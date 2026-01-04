@@ -66,7 +66,7 @@ These files are in `.gitignore` and should NEVER be committed:
    - Use `git secrets` or similar tools
 
 4. **Use placeholder format:**
-   - `mongodb+srv://username:password@cluster.xxxxx.mongodb.net/...`
+   - `MONGODB_URI=your-mongodb-connection-string-here`
    - `JWT_SECRET=your-secret-here`
    - `ADMIN_PASSWORD=your-password-here`
 
@@ -74,8 +74,8 @@ These files are in `.gitignore` and should NEVER be committed:
 
 Before committing, search for:
 ```bash
-# Search for potential secrets
-grep -r "mongodb+srv://" --exclude-dir=node_modules --exclude=".env"
+# Search for potential secrets (connection strings should not be in code)
+grep -r "MONGODB_URI" --exclude-dir=node_modules --exclude=".env"
 grep -r "password.*=" --exclude-dir=node_modules --exclude=".env"
 grep -r "secret.*=" --exclude-dir=node_modules --exclude=".env"
 ```

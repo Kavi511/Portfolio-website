@@ -201,28 +201,19 @@ portfolio-website/
 ## 🌐 Environment Variables
 
 ### Backend (.env)
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
+Create a `.env` file in the `backend/` directory with the following variables:
 
-# MongoDB Atlas Connection
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/portfolio?retryWrites=true&w=majority
+- `PORT` - Server port (default: 5000)
+- `NODE_ENV` - Environment (development/production)
+- `MONGODB_URI` - Your MongoDB Atlas connection string (get from MongoDB Atlas dashboard)
+- `JWT_SECRET` - A strong random string for JWT token signing
+- `ADMIN_USERNAME` - Admin username for login
+- `ADMIN_PASSWORD` - Admin password (use a strong password in production)
+- `FRONTEND_URL` - Frontend URL for CORS (default: http://localhost:5173)
+- `UPLOAD_DIR` - Directory for uploaded files (default: ./uploads)
+- `MAX_FILE_SIZE` - Maximum file size in bytes (default: 5242880)
 
-# JWT Secret (Generate a strong random string)
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-# Admin Credentials (Change these in production!)
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=admin123
-
-# Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:5173
-
-# File Upload Configuration
-UPLOAD_DIR=./uploads
-MAX_FILE_SIZE=5242880
-```
+**⚠️ Important:** Never commit your `.env` file to version control. Use `ENV_TEMPLATE.txt` as a reference.
 
 ### Frontend (.env)
 ```env
@@ -337,7 +328,7 @@ npm run lint
 ## 🐛 Troubleshooting
 
 ### MongoDB Connection Issues
-- Verify `MONGODB_URI` in `.env` is correct
+- Verify your MongoDB connection string in `.env` is correct
 - Check MongoDB Atlas IP whitelist includes your IP
 - Ensure database user credentials are correct
 - Test connection: `npm run test-connection` (in backend)
@@ -352,7 +343,7 @@ npm run lint
 - Verify TypeScript path mapping in `tsconfig.json`
 
 ### Authentication Issues
-- Verify `JWT_SECRET` is set correctly
+- Verify your JWT secret is set correctly in `.env`
 - Check token hasn't expired (24 hours default)
 - Ensure `Authorization: Bearer <token>` header format is correct
 
@@ -386,9 +377,9 @@ npm run lint
    ```
 
 2. **Set production environment variables:**
-   - Use strong `JWT_SECRET`
-   - Update `MONGODB_URI` to production database
-   - Change admin credentials
+   - Use a strong JWT secret
+   - Update MongoDB connection string to production database
+   - Change admin credentials to secure values
    - Set `NODE_ENV=production`
    - Update `FRONTEND_URL` to production domain
 
