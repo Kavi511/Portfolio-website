@@ -22,9 +22,9 @@ const Experience: React.FC = () => {
           {/* Ladder Design - Two Vertical Rails */}
           <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 h-full w-20">
             {/* Left Rail */}
-            <div className="absolute left-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            <div className="absolute left-0 h-full w-2 bg-black dark:bg-white rounded-full"></div>
             {/* Right Rail */}
-            <div className="absolute right-0 h-full w-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+            <div className="absolute right-0 h-full w-2 bg-black dark:bg-white rounded-full"></div>
             
             {/* Additional Rungs - Add more rungs throughout the ladder */}
             {Array.from({ length: 15 }).map((_, rungIndex) => {
@@ -32,7 +32,7 @@ const Experience: React.FC = () => {
               return (
                 <div
                   key={`rung-${rungIndex}`}
-                  className="absolute left-0 w-20 h-1 bg-green-500/50 dark:bg-green-400/50 z-5 rounded-full"
+                  className="absolute left-0 w-20 h-1 bg-black/50 dark:bg-white/50 z-5 rounded-full"
                   style={{ 
                     top: `${rungPosition}%`, 
                     transform: 'translateY(-50%)' 
@@ -56,7 +56,7 @@ const Experience: React.FC = () => {
               >
                 {/* Main Ladder Rung - Horizontal bar connecting the two rails at experience point */}
                 <div 
-                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-20 h-2 bg-green-500 dark:bg-green-400 z-10 rounded-full"
+                  className="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-20 h-2 bg-black dark:bg-white z-10 rounded-full"
                   style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
                 ></div>
                 
