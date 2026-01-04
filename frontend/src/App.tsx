@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SiteDataProvider, useSiteData } from "@/contexts/SiteDataContext";
 import Navbar from "@/components/Navbar";
@@ -26,6 +26,14 @@ function AppContent() {
   const [showTerms, setShowTerms] = useState(false);
   const { siteData } = useSiteData();
 
+  // Check authentication status whenever showAdmin changes
+  useEffect(() => {
+    if (showAdmin) {
+      const authStatus = sessionStorage.getItem('admin_authenticated') === 'true';
+      setIsAuthenticated(authStatus);
+    }
+  }, [showAdmin]);
+
   const handleLogin = () => {
     setIsAuthenticated(true);
     setShowAdmin(true);
@@ -37,12 +45,17 @@ function AppContent() {
     setShowAdmin(false);
   };
 
+  const handleBackToSite = () => {
+    // Just hide admin panel, don't clear session
+    setShowAdmin(false);
+  };
+
   return (
     <>
       {showAdmin && isAuthenticated ? (
-        <Admin onClose={handleLogout} />
+        <Admin onBack={handleBackToSite} onLogout={handleLogout} />
       ) : showAdmin && !isAuthenticated ? (
-        <Login onLogin={handleLogin} />
+        <Login onLogin={handleLogin} onBack={handleBackToSite} />
       ) : (
         <div className="min-h-screen selection:bg-green-500/30 relative transition-colors duration-300 bg-slate-50 dark:bg-black">
           <BackgroundParticles />

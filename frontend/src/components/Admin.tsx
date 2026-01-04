@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from "@/contexts/SiteDataContext";
-import { Save, X, Plus, Trash2, Home, RotateCcw, Download } from 'lucide-react';
+import { Save, X, Plus, Trash2, Home, Download, Key, User, Eye, EyeOff, LogOut } from 'lucide-react';
 import { Experience, SkillCategory, Project, Certification } from "@/types";
 import BackgroundParticles from './BackgroundParticles';
 
 interface AdminProps {
-  onClose: () => void;
+  onBack: () => void;
+  onLogout: () => void;
 }
 
-const Admin: React.FC<AdminProps> = ({ onClose }) => {
-  const { siteData, updatePersonalInfo, updateExperiences, updateSkillCategories, updateProjects, updateCertifications, resetToDefaults } = useSiteData();
-  const [activeTab, setActiveTab] = useState<'personal' | 'experience' | 'skills' | 'projects' | 'certifications'>('personal');
+const Admin: React.FC<AdminProps> = ({ onBack, onLogout }) => {
+  const { siteData, updatePersonalInfo, updateExperiences, updateSkillCategories, updateProjects, updateCertifications } = useSiteData();
+  const [activeTab, setActiveTab] = useState<'personal' | 'experience' | 'skills' | 'projects' | 'certifications' | 'settings'>('personal');
+  
+  // Settings state
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [settingsError, setSettingsError] = useState('');
+  const [settingsSuccess, setSettingsSuccess] = useState('');
+  
+  // Load current credentials
+  useEffect(() => {
+    const DEFAULT_USERNAME = 'admin';
+    const DEFAULT_PASSWORD = 'admin123';
+    const storedUsername = localStorage.getItem('admin_username') || DEFAULT_USERNAME;
+    setCurrentUsername(storedUsername);
+  }, []);
 
   const [personalInfo, setPersonalInfo] = useState(siteData.personalInfo);
   const [experiences, setExperiences] = useState(siteData.experiences);
@@ -25,13 +46,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
     updateProjects(projects);
     updateCertifications(certifications);
     alert('Changes saved successfully! Refresh the page to see updates.');
-  };
-
-  const handleReset = () => {
-    if (confirm('Are you sure you want to reset all data to defaults? This cannot be undone.')) {
-      resetToDefaults();
-      window.location.reload();
-    }
   };
 
   const addExperience = () => {
@@ -111,12 +125,71 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
     ));
   };
 
+  const handleResetCredentials = () => {
+    setSettingsError('');
+    setSettingsSuccess('');
+    
+    // Validate inputs
+    if (!currentPassword) {
+      setSettingsError('Please enter your current password');
+      return;
+    }
+    
+    if (newUsername && newUsername.length < 3) {
+      setSettingsError('New username must be at least 3 characters');
+      return;
+    }
+    
+    if (newPassword && newPassword.length < 6) {
+      setSettingsError('New password must be at least 6 characters');
+      return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+      setSettingsError('New passwords do not match');
+      return;
+    }
+    
+    // Verify current password
+    const DEFAULT_USERNAME = 'admin';
+    const DEFAULT_PASSWORD = 'admin123';
+    const storedUsername = localStorage.getItem('admin_username') || DEFAULT_USERNAME;
+    const storedPassword = localStorage.getItem('admin_password') || DEFAULT_PASSWORD;
+    
+    if (currentPassword !== storedPassword) {
+      setSettingsError('Current password is incorrect');
+      return;
+    }
+    
+    // Update credentials
+    if (newUsername) {
+      localStorage.setItem('admin_username', newUsername);
+      setCurrentUsername(newUsername);
+      setNewUsername('');
+    }
+    
+    if (newPassword) {
+      localStorage.setItem('admin_password', newPassword);
+      setNewPassword('');
+      setConfirmPassword('');
+    }
+    
+    setCurrentPassword('');
+    setSettingsSuccess('Credentials updated successfully! You will need to log in again with your new credentials.');
+    
+    // Logout after 2 seconds
+    setTimeout(() => {
+      onLogout();
+    }, 2000);
+  };
+
   const tabs = [
     { id: 'personal', label: 'Personal Info' },
     { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
     { id: 'certifications', label: 'Certifications' },
+    { id: 'settings', label: 'Settings' },
   ];
 
   return (
@@ -132,13 +205,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={handleReset}
-                className="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors flex items-center gap-2"
-              >
-                <RotateCcw size={18} />
-                Reset
-              </button>
-              <button
                 onClick={handleSave}
                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2"
               >
@@ -146,14 +212,22 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                 Save Changes
               </button>
               <button
-                onClick={() => {
-                  sessionStorage.removeItem('admin_authenticated');
-                  onClose();
-                }}
+                onClick={onBack}
                 className="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors flex items-center gap-2"
               >
                 <Home size={18} />
                 Back to Site
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm('Are you sure you want to log out?')) {
+                    onLogout();
+                  }
+                }}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+              >
+                <LogOut size={18} />
+                Logout
               </button>
             </div>
           </div>
@@ -229,16 +303,6 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                     value={personalInfo.location}
                     onChange={(e) => setPersonalInfo({ ...personalInfo, location: e.target.value })}
                     className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Education</label>
-                  <textarea
-                    value={personalInfo.education}
-                    onChange={(e) => setPersonalInfo({ ...personalInfo, education: e.target.value })}
-                    rows={3}
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    placeholder="Enter education details (use new lines for multiple lines)"
                   />
                 </div>
                 <div>
@@ -626,6 +690,168 @@ const Admin: React.FC<AdminProps> = ({ onClose }) => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Admin Credentials</h2>
+                <p className="text-slate-600 dark:text-slate-400">Change your admin username and password</p>
+              </div>
+
+              {/* Current Username Display */}
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <User className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Current Username:</span>
+                </div>
+                <p className="text-lg font-mono text-slate-900 dark:text-white">{currentUsername}</p>
+              </div>
+
+              {/* Error Message */}
+              {settingsError && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-600 dark:text-red-400">
+                  {settingsError}
+                </div>
+              )}
+
+              {/* Success Message */}
+              {settingsSuccess && (
+                <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-green-600 dark:text-green-400">
+                  {settingsSuccess}
+                </div>
+              )}
+
+              <div className="space-y-6">
+                {/* Current Password */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    Current Password <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={currentPassword}
+                      onChange={(e) => {
+                        setCurrentPassword(e.target.value);
+                        setSettingsError('');
+                      }}
+                      placeholder="Enter your current password"
+                      className="w-full pl-10 pr-12 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* New Username */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    New Username (Optional)
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      value={newUsername}
+                      onChange={(e) => {
+                        setNewUsername(e.target.value);
+                        setSettingsError('');
+                      }}
+                      placeholder="Leave empty to keep current username"
+                      className="w-full pl-10 pr-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+                      minLength={3}
+                    />
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Minimum 3 characters</p>
+                </div>
+
+                {/* New Password */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    New Password (Optional)
+                  </label>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value);
+                        setSettingsError('');
+                      }}
+                      placeholder="Leave empty to keep current password"
+                      className="w-full pl-10 pr-12 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+                      minLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Minimum 6 characters</p>
+                </div>
+
+                {/* Confirm Password */}
+                {newPassword && (
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Confirm New Password <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => {
+                          setConfirmPassword(e.target.value);
+                          setSettingsError('');
+                        }}
+                        placeholder="Re-enter your new password"
+                        className="w-full pl-10 pr-12 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+                        required={!!newPassword}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Update Button */}
+                <div className="pt-4">
+                  <button
+                    onClick={handleResetCredentials}
+                    className="w-full px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Key size={18} />
+                    Update Credentials
+                  </button>
+                </div>
+
+                {/* Info Box */}
+                <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <p className="text-sm text-blue-600 dark:text-blue-400">
+                    <strong>Note:</strong> After updating your credentials, you will be logged out and need to log in again with your new username and password.
+                  </p>
+                </div>
               </div>
             </div>
           )}

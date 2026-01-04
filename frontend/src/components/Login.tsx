@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, User, LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, User, LogIn, AlertCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import BackgroundParticles from './BackgroundParticles';
 
 interface LoginProps {
   onLogin: () => void;
+  onBack?: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,19 +24,31 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
     setIsLoading(true);
 
+    // Trim whitespace from inputs
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    // Validate inputs are not empty
+    if (!trimmedUsername || !trimmedPassword) {
+      setError('Please enter both username and password');
+      setIsLoading(false);
+      return;
+    }
+
     // Simulate API call delay
     setTimeout(() => {
       // Check credentials
       const storedUsername = localStorage.getItem('admin_username') || DEFAULT_USERNAME;
       const storedPassword = localStorage.getItem('admin_password') || DEFAULT_PASSWORD;
 
-      if (username === storedUsername && password === storedPassword) {
+      // Compare with trimmed values
+      if (trimmedUsername === storedUsername && trimmedPassword === storedPassword) {
         // Store session
         sessionStorage.setItem('admin_authenticated', 'true');
         setIsLoading(false);
         onLogin();
       } else {
-        setError('Invalid username or password');
+        setError('Invalid username or password. Please check your credentials and try again.');
         setIsLoading(false);
       }
     }, 500);
@@ -52,6 +65,17 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           transition={{ duration: 0.5 }}
           className="glass-card rounded-2xl p-8 shadow-2xl border border-slate-200 dark:border-white/10"
         >
+          {/* Back Button */}
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="mb-4 flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back to Website</span>
+            </button>
+          )}
+
           {/* Header */}
           <div className="text-center mb-8">
             <motion.div
@@ -132,10 +156,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-600 dark:text-red-400 text-sm"
+                className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-600 dark:text-red-400 text-sm"
               >
-                <AlertCircle className="w-4 h-4" />
-                <span>{error}</span>
+                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <span>{error}</span>
+                  <p className="mt-1 text-xs text-red-500 dark:text-red-400/80">
+                    If you've changed your credentials, use the new username and password. Default credentials are: username: <span className="font-mono">admin</span>, password: <span className="font-mono">admin123</span>
+                  </p>
+                </div>
               </motion.div>
             )}
 
@@ -158,13 +187,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               )}
             </button>
           </form>
-
-          {/* Default Credentials Hint (Remove in production!) */}
-          <div className="mt-6 p-3 bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-            <p className="text-xs text-slate-600 dark:text-slate-400 text-center">
-              <span className="font-mono font-semibold">Default:</span> username: <span className="font-mono">admin</span>, password: <span className="font-mono">admin123</span>
-            </p>
-          </div>
         </motion.div>
       </div>
     </div>
