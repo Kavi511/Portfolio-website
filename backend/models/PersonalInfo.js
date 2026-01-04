@@ -57,6 +57,18 @@ const personalInfoSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  cvFile: {
+    type: Buffer, // Store PDF file as binary data in database
+    default: null,
+  },
+  cvFileName: {
+    type: String,
+    default: '',
+  },
+  cvFileType: {
+    type: String,
+    default: 'application/pdf',
+  },
 }, {
   timestamps: true,
 });

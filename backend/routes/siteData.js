@@ -21,8 +21,12 @@ router.get('/', async (req, res) => {
       Certification.find().sort({ order: 1, issueDate: -1 }),
     ]);
 
+    // Exclude cvFile buffer from response (large binary data)
+    const personalInfoResponse = personalInfo.toObject();
+    delete personalInfoResponse.cvFile;
+
     res.json({
-      personalInfo,
+      personalInfo: personalInfoResponse,
       professionalSummary,
       experiences,
       skillCategories,
@@ -39,7 +43,10 @@ router.get('/', async (req, res) => {
 router.get('/personal-info', async (req, res) => {
   try {
     const personalInfo = await PersonalInfo.getPersonalInfo();
-    res.json(personalInfo);
+    // Exclude cvFile buffer from response
+    const personalInfoResponse = personalInfo.toObject();
+    delete personalInfoResponse.cvFile;
+    res.json(personalInfoResponse);
   } catch (error) {
     console.error('Error fetching personal info:', error);
     res.status(500).json({ error: 'Error fetching personal info' });
@@ -50,17 +57,26 @@ router.put('/personal-info', authenticateToken, async (req, res) => {
   try {
     let personalInfo = await PersonalInfo.findOne();
     
+    // Don't allow updating cvFile through this route (use upload route instead)
+    const updateData = { ...req.body };
+    delete updateData.cvFile;
+    delete updateData.cvFileName;
+    delete updateData.cvFileType;
+    
     if (!personalInfo) {
-      personalInfo = await PersonalInfo.create(req.body);
+      personalInfo = await PersonalInfo.create(updateData);
     } else {
       personalInfo = await PersonalInfo.findOneAndUpdate(
         {},
-        req.body,
+        updateData,
         { new: true, runValidators: true }
       );
     }
 
-    res.json(personalInfo);
+    // Exclude cvFile buffer from response
+    const personalInfoResponse = personalInfo.toObject();
+    delete personalInfoResponse.cvFile;
+    res.json(personalInfoResponse);
   } catch (error) {
     console.error('Error updating personal info:', error);
     res.status(500).json({ error: 'Error updating personal info' });

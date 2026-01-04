@@ -112,9 +112,8 @@ const Hero: React.FC = () => {
                 <Mail className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
-                href={PERSONAL_INFO.cvUrl || "/cv.pdf"}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={PERSONAL_INFO.cvUrl?.startsWith('http') ? PERSONAL_INFO.cvUrl : `${PERSONAL_INFO.cvUrl || "/api/upload/cv/download"}`}
+                download
                 className="flex items-center justify-center px-8 py-4 bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 transition-all group"
               >
                 Download CV

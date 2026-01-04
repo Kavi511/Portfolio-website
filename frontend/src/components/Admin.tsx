@@ -371,33 +371,116 @@ const Admin: React.FC<AdminProps> = ({ onBack, onLogout }) => {
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">CV File</label>
                   <div className="space-y-3">
-                    <input
-                      type="text"
-                      value={personalInfo.cvUrl || ""}
-                      onChange={(e) => setPersonalInfo({ ...personalInfo, cvUrl: e.target.value })}
-                      placeholder="/cv.pdf or https://example.com/cv.pdf"
-                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={personalInfo.cvUrl || ""}
+                        onChange={(e) => setPersonalInfo({ ...personalInfo, cvUrl: e.target.value })}
+                        placeholder="/api/upload/cv/download or https://example.com/cv.pdf"
+                        className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                      />
+                      {personalInfo.cvUrl && personalInfo.cvUrl.includes('/api/upload/cv/download') && (
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (confirm('Are you sure you want to remove the CV file from the database? This action cannot be undone.')) {
+                              try {
+                                const token = localStorage.getItem('admin_token');
+                                const apiUrl = import.meta.env.VITE_API_URL || '/api';
+                                const headers: HeadersInit = {
+                                  'Content-Type': 'application/json',
+                                };
+                                if (token) {
+                                  headers['Authorization'] = `Bearer ${token}`;
+                                }
+
+                                const response = await fetch(`${apiUrl}/upload/cv`, {
+                                  method: 'DELETE',
+                                  headers: headers,
+                                });
+
+                                if (response.ok) {
+                                  setPersonalInfo({ ...personalInfo, cvUrl: '' });
+                                  alert('CV file removed successfully from database.');
+                                } else {
+                                  let errorMessage = 'Delete failed';
+                                  try {
+                                    const error = await response.json();
+                                    errorMessage = error.error || error.message || errorMessage;
+                                  } catch (e) {
+                                    errorMessage = `Delete failed with status ${response.status}`;
+                                  }
+                                  alert(`Failed to remove CV: ${errorMessage}`);
+                                }
+                              } catch (error: any) {
+                                console.error('Delete CV error:', error);
+                                alert(`Failed to remove CV: ${error.message || 'Unknown error'}`);
+                              }
+                            }
+                          }}
+                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+                          title="Remove CV file from database"
+                        >
+                          <Trash2 size={18} />
+                          Remove CV
+                        </button>
+                      )}
+                    </div>
                     <div className="relative">
                       <input
                         type="file"
                         accept=".pdf"
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            // For client-side only: store as data URL or path
-                            // In a real app, you'd upload to a server
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                              // Store the file name/path
-                              // Note: In a real app, you'd upload this to a server
-                              const fileName = file.name;
-                              // For now, we'll just use the file name
-                              // User needs to place the file in the public folder
-                              setPersonalInfo({ ...personalInfo, cvUrl: `/${fileName}` });
-                              alert(`File selected: ${fileName}\n\nPlease ensure this file is placed in the public folder of your project.\nThe CV URL has been set to: /${fileName}`);
-                            };
-                            reader.readAsDataURL(file);
+                            // Check file size (max 5MB)
+                            if (file.size > 5 * 1024 * 1024) {
+                              alert('File size must be less than 5MB');
+                              return;
+                            }
+
+                            // Create FormData for file upload
+                            const formData = new FormData();
+                            formData.append('cv', file);
+
+                            try {
+                              // Get JWT token from localStorage
+                              const token = localStorage.getItem('admin_token');
+                              
+                              // Upload to backend - use relative URL to work with Vite proxy
+                              const apiUrl = import.meta.env.VITE_API_URL || '/api';
+                              const headers: HeadersInit = {};
+                              if (token) {
+                                headers['Authorization'] = `Bearer ${token}`;
+                              }
+                              // Don't set Content-Type for FormData - browser will set it with boundary
+                              
+                              const response = await fetch(`${apiUrl}/upload/cv`, {
+                                method: 'POST',
+                                headers: headers,
+                                body: formData,
+                              });
+
+                              if (response.ok) {
+                                const data = await response.json();
+                                // Update CV URL with the uploaded file URL
+                                setPersonalInfo({ ...personalInfo, cvUrl: data.url });
+                                alert(`CV uploaded successfully! File stored in database.`);
+                              } else {
+                                let errorMessage = 'Upload failed';
+                                try {
+                                  const error = await response.json();
+                                  errorMessage = error.error || error.message || errorMessage;
+                                } catch (e) {
+                                  errorMessage = `Upload failed with status ${response.status}`;
+                                }
+                                alert(`Upload failed: ${errorMessage}\n\nPlease ensure:\n1. Backend server is running on port 5000\n2. You are logged in with valid credentials\n3. File is a valid PDF (max 5MB)`);
+                              }
+                            } catch (error: any) {
+                              console.error('Upload error:', error);
+                              const errorMessage = error.message || 'Unknown error';
+                              alert(`Failed to upload CV: ${errorMessage}\n\nPlease check:\n1. Backend server is running (http://localhost:5000)\n2. Backend is accessible\n3. No CORS or network issues`);
+                            }
                           }
                         }}
                         className="hidden"
@@ -412,8 +495,34 @@ const Admin: React.FC<AdminProps> = ({ onBack, onLogout }) => {
                       </label>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Enter a path (e.g., /cv.pdf) or upload a PDF file. If uploading, place the file in the public folder.
+                      Upload a PDF file (max 5MB) or enter a URL. Files are stored in the database.
                     </p>
+                    {personalInfo.cvUrl && (
+                      <div className="mt-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-medium text-green-600 dark:text-green-400 mb-1">
+                              CV File Status:
+                            </p>
+                            <p className="text-xs text-green-600 dark:text-green-400">
+                              {personalInfo.cvUrl.includes('/api/upload/cv/download') 
+                                ? '✓ Stored in database' 
+                                : `URL: ${personalInfo.cvUrl}`}
+                            </p>
+                          </div>
+                          {personalInfo.cvUrl.includes('/api/upload/cv/download') && (
+                            <a
+                              href={personalInfo.cvUrl}
+                              download
+                              className="px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600 transition-colors flex items-center gap-1"
+                            >
+                              <Download size={14} />
+                              Preview
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

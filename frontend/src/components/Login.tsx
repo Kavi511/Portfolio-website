@@ -19,7 +19,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   const DEFAULT_USERNAME = 'admin';
   const DEFAULT_PASSWORD = 'admin123';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -35,7 +35,34 @@ const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
       return;
     }
 
-    // Simulate API call delay
+    // Try backend API first, fallback to local storage
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: trimmedUsername,
+          password: trimmedPassword,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Store JWT token and session
+        localStorage.setItem('admin_token', data.token);
+        sessionStorage.setItem('admin_authenticated', 'true');
+        setIsLoading(false);
+        onLogin();
+        return;
+      }
+    } catch (error) {
+      console.log('Backend login failed, trying local auth:', error);
+    }
+
+    // Fallback to local authentication
     setTimeout(() => {
       // Check credentials
       const storedUsername = localStorage.getItem('admin_username') || DEFAULT_USERNAME;
