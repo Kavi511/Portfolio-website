@@ -44,11 +44,11 @@ function AppContent() {
       ) : showAdmin && !isAuthenticated ? (
         <Login onLogin={handleLogin} />
       ) : (
-        <div className="min-h-screen selection:bg-green-500/30 relative transition-colors duration-300">
+        <div className="min-h-screen selection:bg-green-500/30 relative transition-colors duration-300 bg-slate-50 dark:bg-black">
           <BackgroundParticles />
           <Navbar onAdminClick={() => setShowAdmin(true)} />
           
-          <main className="relative z-10">
+          <main className="relative z-20">
             <Hero />
             <About />
             <Experience />
@@ -57,7 +57,7 @@ function AppContent() {
             <Certifications />
           </main>
 
-          <footer id="footer" className="py-16 border-t border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-black/50 backdrop-blur-sm relative z-10 transition-colors duration-300">
+          <footer id="footer" className="py-16 border-t border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-black/50 backdrop-blur-sm relative z-20 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {/* Contact Me Section */}
               <div className="mb-12">
