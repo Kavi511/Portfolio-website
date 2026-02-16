@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Mail, MapPin } from 'lucide-react';
 import { useSiteData } from "@/contexts/SiteDataContext";
@@ -9,9 +9,23 @@ import TerminalTypingText from './TerminalTypingText';
 const Hero: React.FC = () => {
   const { siteData } = useSiteData();
   const PERSONAL_INFO = siteData.personalInfo;
+  const [showName, setShowName] = useState(false);
   const [showRole, setShowRole] = useState(false);
   const [showTagline, setShowTagline] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  // Ensure name is always available
+  const displayName = PERSONAL_INFO?.name || "Kavishka Herath";
+
+  // Fallback: Show name after 2 seconds if typing doesn't trigger it
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!showName) {
+        setShowName(true);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [showName]);
 
   const handleDownloadCV = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -111,27 +125,31 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-6 min-h-[1.2em]"
+              className="text-5xl md:text-7xl font-bold tracking-tight mb-6 min-h-[1.2em] flex flex-wrap items-center gap-2"
             >
-              <TypingText 
-                text="I'm "
-                speed={80}
-                className=""
-                onComplete={() => {
-                  setTimeout(() => setShowRole(true), 300);
-                }}
-              />
-              {showRole && (
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500">
+              <span className="text-slate-900 dark:text-white">
+                <TypingText 
+                  text="I'm "
+                  speed={80}
+                  className=""
+                  onComplete={() => {
+                    setTimeout(() => setShowName(true), 300);
+                  }}
+                />
+              </span>
+              <span className="inline-block text-green-500 dark:text-green-400">
+                {showName ? (
                   <TypingText 
-                    text={PERSONAL_INFO.name}
+                    text={displayName}
                     speed={80}
                     onComplete={() => {
-                      setTimeout(() => setShowTagline(true), 500);
+                      setTimeout(() => setShowRole(true), 500);
                     }}
                   />
-                </span>
-              )}
+                ) : (
+                  <span>{displayName}</span>
+                )}
+              </span>
             </motion.h1>
 
             {showRole && (
@@ -139,15 +157,11 @@ const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-2xl md:text-3xl font-semibold mb-8 min-h-[1.5em]"
+                className="text-2xl md:text-3xl font-semibold mb-8 min-h-[1.5em] text-slate-700 dark:text-slate-300"
               >
-                <TerminalTypingText 
+                <TypingText 
                   text={PERSONAL_INFO.role}
                   speed={50}
-                  prompt="$ "
-                  className="text-slate-700 dark:text-slate-300"
-                  showCursor={false}
-                  showCursorAfterComplete={false}
                   onComplete={() => {
                     setTimeout(() => setShowTagline(true), 500);
                   }}
@@ -160,15 +174,11 @@ const Hero: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-lg mb-6 leading-relaxed max-w-2xl min-h-[3em]"
+                className="text-lg mb-6 leading-relaxed max-w-2xl min-h-[3em] text-slate-600 dark:text-slate-400"
               >
-                <TerminalTypingText 
+                <TypingText 
                   text={PERSONAL_INFO.tagline}
                   speed={30}
-                  prompt="$ "
-                  className="text-slate-600 dark:text-slate-400"
-                  showCursor={false}
-                  showCursorAfterComplete={true}
                 />
               </motion.p>
             )}

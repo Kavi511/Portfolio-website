@@ -1,15 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Settings } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ThemeToggle from './ThemeToggle';
+import { Settings } from 'lucide-react';
 
 interface NavbarProps {
   onAdminClick: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -53,67 +50,19 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
 
           {/* Right Side Icons */}
           <div className="absolute right-0 flex items-center space-x-4">
-            {/* Theme Toggle */}
-            <ThemeToggle />
-
             {/* Admin Portal Icon */}
             <button
               onClick={onAdminClick}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors hidden md:block"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               aria-label="Admin Portal"
               title="Admin Portal"
             >
               <Settings size={20} />
             </button>
           </div>
-
-          <div className="flex items-center space-x-4 md:hidden">
-            <ThemeToggle />
-            <button
-              className="text-slate-900 dark:text-slate-100 p-2 transition-colors duration-300"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-white/10 overflow-hidden transition-colors duration-300"
-          >
-            <div className="px-4 py-8 flex flex-col space-y-4 items-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium text-slate-700 dark:text-slate-300 hover:text-green-500"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  onAdminClick();
-                }}
-                className="w-full text-center py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold flex items-center justify-center gap-2"
-              >
-                <Settings size={20} />
-                Admin Portal
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 };

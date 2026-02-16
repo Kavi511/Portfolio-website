@@ -18,7 +18,7 @@ import { Experience, SkillCategory, Project, Certification } from './types';
 
 export const PERSONAL_INFO = {
   name: "Kavishka Herath",
-  role: "Entry-Level DevOps Engineer",
+  role: "Aspiring SRE & DevOps Engineer",
   tagline: "Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.",
   about: "A final year Computer Science undergraduate passionate about Cloud Computing and DevOps. Focused on building highly available, scalable, and automated systems that empower developers and enhance operational efficiency.",
   location: "Colombo, Sri Lanka",
