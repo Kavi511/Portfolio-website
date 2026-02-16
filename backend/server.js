@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/database.js';
 import authRoutes from './routes/auth.js';
 import siteDataRoutes from './routes/siteData.js';
 import contactRoutes from './routes/contact.js';
@@ -18,9 +17,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// Connect to MongoDB
-connectDB();
 
 // Middleware
 // CORS configuration - allow localhost and network IPs for development

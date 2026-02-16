@@ -1,11 +1,15 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import ContactMessage from '../models/ContactMessage.js';
 import { authenticateToken } from '../middleware/auth.js';
+import {
+  getContactMessages,
+  addContactMessage,
+  updateContactMessage,
+  deleteContactMessage,
+} from '../data/store.js';
 
 const router = express.Router();
 
-// Submit contact form (Public)
 router.post(
   '/',
   [
@@ -14,7 +18,7 @@ router.post(
     body('subject').trim().notEmpty().withMessage('Subject is required'),
     body('message').trim().notEmpty().withMessage('Message is required'),
   ],
-  async (req, res) => {
+  (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -22,13 +26,7 @@ router.post(
       }
 
       const { name, email, subject, message } = req.body;
-
-      const contactMessage = await ContactMessage.create({
-        name,
-        email,
-        subject,
-        message,
-      });
+      const contactMessage = addContactMessage({ name, email, subject, message });
 
       res.status(201).json({
         message: 'Contact message submitted successfully',
@@ -41,13 +39,9 @@ router.post(
   }
 );
 
-// Get all contact messages (Admin only)
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
   try {
-    const messages = await ContactMessage.find()
-      .sort({ createdAt: -1 })
-      .select('-__v');
-
+    const messages = getContactMessages();
     res.json(messages);
   } catch (error) {
     console.error('Error fetching contact messages:', error);
@@ -55,15 +49,11 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-// Get single contact message (Admin only)
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticateToken, (req, res) => {
   try {
-    const message = await ContactMessage.findById(req.params.id);
-
-    if (!message) {
-      return res.status(404).json({ error: 'Message not found' });
-    }
-
+    const messages = getContactMessages();
+    const message = messages.find((m) => m._id === req.params.id);
+    if (!message) return res.status(404).json({ error: 'Message not found' });
     res.json(message);
   } catch (error) {
     console.error('Error fetching contact message:', error);
@@ -71,55 +61,32 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// Mark message as read (Admin only)
-router.patch('/:id/read', authenticateToken, async (req, res) => {
+router.patch('/:id/read', authenticateToken, (req, res) => {
   try {
-    const message = await ContactMessage.findByIdAndUpdate(
-      req.params.id,
-      { read: true },
-      { new: true }
-    );
-
-    if (!message) {
-      return res.status(404).json({ error: 'Message not found' });
-    }
-
-    res.json(message);
+    const updated = updateContactMessage(req.params.id, { read: true });
+    if (!updated) return res.status(404).json({ error: 'Message not found' });
+    res.json(updated);
   } catch (error) {
     console.error('Error updating message:', error);
     res.status(500).json({ error: 'Error updating message' });
   }
 });
 
-// Mark message as replied (Admin only)
-router.patch('/:id/replied', authenticateToken, async (req, res) => {
+router.patch('/:id/replied', authenticateToken, (req, res) => {
   try {
-    const message = await ContactMessage.findByIdAndUpdate(
-      req.params.id,
-      { replied: true },
-      { new: true }
-    );
-
-    if (!message) {
-      return res.status(404).json({ error: 'Message not found' });
-    }
-
-    res.json(message);
+    const updated = updateContactMessage(req.params.id, { replied: true });
+    if (!updated) return res.status(404).json({ error: 'Message not found' });
+    res.json(updated);
   } catch (error) {
     console.error('Error updating message:', error);
     res.status(500).json({ error: 'Error updating message' });
   }
 });
 
-// Delete contact message (Admin only)
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticateToken, (req, res) => {
   try {
-    const message = await ContactMessage.findByIdAndDelete(req.params.id);
-
-    if (!message) {
-      return res.status(404).json({ error: 'Message not found' });
-    }
-
+    const deleted = deleteContactMessage(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Message not found' });
     res.json({ message: 'Contact message deleted successfully' });
   } catch (error) {
     console.error('Error deleting contact message:', error);
@@ -128,4 +95,3 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 });
 
 export default router;
-

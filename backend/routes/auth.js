@@ -1,10 +1,18 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
-// Login
+const checkPassword = async (password) => {
+  const hash = process.env.ADMIN_PASSWORD_HASH;
+  if (hash) return bcrypt.compare(password, hash);
+  const plain = process.env.ADMIN_PASSWORD;
+  if (plain) return password === plain;
+  return false;
+};
+
+// Login (no database - uses env ADMIN_USERNAME and ADMIN_PASSWORD or ADMIN_PASSWORD_HASH)
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -13,32 +21,31 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Username and password are required' });
     }
 
-    // Find user
-    const user = await User.findOne({ username });
-    if (!user) {
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+    const hasPassword = process.env.ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD;
+    if (!hasPassword) {
+      console.warn('No ADMIN_PASSWORD or ADMIN_PASSWORD_HASH set in .env');
+      return res.status(500).json({ error: 'Server not configured for login' });
+    }
+
+    if (username !== adminUsername) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Check password
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await checkPassword(password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, username: user.username },
+      { userId: 'admin', username: adminUsername, role: 'admin' },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
     );
 
     res.json({
       token,
-      user: {
-        id: user._id,
-        username: user.username,
-        role: user.role,
-      },
+      user: { id: 'admin', username: adminUsername, role: 'admin' },
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -46,8 +53,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Verify token
-router.get('/verify', async (req, res) => {
+// Verify token (no database - just validate JWT)
+router.get('/verify', (req, res) => {
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -57,18 +64,12 @@ router.get('/verify', async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
     res.json({
       valid: true,
       user: {
-        id: user._id,
-        username: user.username,
-        role: user.role,
+        id: decoded.userId,
+        username: decoded.username,
+        role: decoded.role || 'admin',
       },
     });
   } catch (error) {
@@ -77,4 +78,3 @@ router.get('/verify', async (req, res) => {
 });
 
 export default router;
-

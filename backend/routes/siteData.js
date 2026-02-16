@@ -1,37 +1,20 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/auth.js';
-import PersonalInfo from '../models/PersonalInfo.js';
-import ProfessionalSummary from '../models/ProfessionalSummary.js';
-import Experience from '../models/Experience.js';
-import SkillCategory from '../models/SkillCategory.js';
-import Project from '../models/Project.js';
-import Certification from '../models/Certification.js';
+import { getSiteData, saveSiteData } from '../data/store.js';
 
 const router = express.Router();
 
-// ========== GET ALL SITE DATA (Public) ==========
-router.get('/', async (req, res) => {
+// GET all site data (public)
+router.get('/', (req, res) => {
   try {
-    const [personalInfo, professionalSummary, experiences, skillCategories, projects, certifications] = await Promise.all([
-      PersonalInfo.getPersonalInfo(),
-      ProfessionalSummary.getProfessionalSummary(),
-      Experience.find().sort({ order: 1, createdAt: -1 }),
-      SkillCategory.find().sort({ order: 1 }),
-      Project.find().sort({ order: 1, createdAt: -1 }),
-      Certification.find().sort({ order: 1, issueDate: -1 }),
-    ]);
-
-    // Exclude cvFile buffer from response (large binary data)
-    const personalInfoResponse = personalInfo.toObject();
-    delete personalInfoResponse.cvFile;
-
+    const data = getSiteData();
     res.json({
-      personalInfo: personalInfoResponse,
-      professionalSummary,
-      experiences,
-      skillCategories,
-      projects,
-      certifications,
+      personalInfo: data.personalInfo,
+      professionalSummary: data.professionalSummary,
+      experiences: data.experiences,
+      skillCategories: data.skillCategories,
+      projects: data.projects,
+      certifications: data.certifications,
     });
   } catch (error) {
     console.error('Error fetching site data:', error);
@@ -39,96 +22,74 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ========== PERSONAL INFO ==========
-router.get('/personal-info', async (req, res) => {
+// ---------- Personal info ----------
+router.get('/personal-info', (req, res) => {
   try {
-    const personalInfo = await PersonalInfo.getPersonalInfo();
-    // Exclude cvFile buffer from response
-    const personalInfoResponse = personalInfo.toObject();
-    delete personalInfoResponse.cvFile;
-    res.json(personalInfoResponse);
+    const data = getSiteData();
+    res.json(data.personalInfo);
   } catch (error) {
     console.error('Error fetching personal info:', error);
     res.status(500).json({ error: 'Error fetching personal info' });
   }
 });
 
-router.put('/personal-info', authenticateToken, async (req, res) => {
+router.put('/personal-info', authenticateToken, (req, res) => {
   try {
-    let personalInfo = await PersonalInfo.findOne();
-    
-    // Don't allow updating cvFile through this route (use upload route instead)
-    const updateData = { ...req.body };
-    delete updateData.cvFile;
-    delete updateData.cvFileName;
-    delete updateData.cvFileType;
-    
-    if (!personalInfo) {
-      personalInfo = await PersonalInfo.create(updateData);
-    } else {
-      personalInfo = await PersonalInfo.findOneAndUpdate(
-        {},
-        updateData,
-        { new: true, runValidators: true }
-      );
-    }
-
-    // Exclude cvFile buffer from response
-    const personalInfoResponse = personalInfo.toObject();
-    delete personalInfoResponse.cvFile;
-    res.json(personalInfoResponse);
+    const data = getSiteData();
+    const update = { ...req.body };
+    delete update.cvFile;
+    delete update.cvFileName;
+    delete update.cvFileType;
+    data.personalInfo = { ...data.personalInfo, ...update };
+    saveSiteData(data);
+    res.json(data.personalInfo);
   } catch (error) {
     console.error('Error updating personal info:', error);
     res.status(500).json({ error: 'Error updating personal info' });
   }
 });
 
-// ========== PROFESSIONAL SUMMARY ==========
-router.get('/professional-summary', async (req, res) => {
+// ---------- Professional summary ----------
+router.get('/professional-summary', (req, res) => {
   try {
-    const summary = await ProfessionalSummary.getProfessionalSummary();
-    res.json(summary);
+    const data = getSiteData();
+    res.json(data.professionalSummary);
   } catch (error) {
     console.error('Error fetching professional summary:', error);
     res.status(500).json({ error: 'Error fetching professional summary' });
   }
 });
 
-router.put('/professional-summary', authenticateToken, async (req, res) => {
+router.put('/professional-summary', authenticateToken, (req, res) => {
   try {
-    let summary = await ProfessionalSummary.findOne();
-    
-    if (!summary) {
-      summary = await ProfessionalSummary.create(req.body);
-    } else {
-      summary = await ProfessionalSummary.findOneAndUpdate(
-        {},
-        req.body,
-        { new: true, runValidators: true }
-      );
-    }
-
-    res.json(summary);
+    const data = getSiteData();
+    data.professionalSummary = { ...data.professionalSummary, ...req.body };
+    saveSiteData(data);
+    res.json(data.professionalSummary);
   } catch (error) {
     console.error('Error updating professional summary:', error);
     res.status(500).json({ error: 'Error updating professional summary' });
   }
 });
 
-// ========== EXPERIENCES ==========
-router.get('/experiences', async (req, res) => {
+// ---------- Experiences ----------
+router.get('/experiences', (req, res) => {
   try {
-    const experiences = await Experience.find().sort({ order: 1, createdAt: -1 });
-    res.json(experiences);
+    const data = getSiteData();
+    const sorted = [...data.experiences].sort((a, b) => (a.order || 0) - (b.order || 0));
+    res.json(sorted);
   } catch (error) {
     console.error('Error fetching experiences:', error);
     res.status(500).json({ error: 'Error fetching experiences' });
   }
 });
 
-router.post('/experiences', authenticateToken, async (req, res) => {
+router.post('/experiences', authenticateToken, (req, res) => {
   try {
-    const experience = await Experience.create(req.body);
+    const data = getSiteData();
+    const experience = { ...req.body, id: req.body.id || `exp-${Date.now()}` };
+    data.experiences.push(experience);
+    saveSiteData(data);
     res.status(201).json(experience);
   } catch (error) {
     console.error('Error creating experience:', error);
@@ -136,33 +97,27 @@ router.post('/experiences', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/experiences/:id', authenticateToken, async (req, res) => {
+router.put('/experiences/:id', authenticateToken, (req, res) => {
   try {
-    const experience = await Experience.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    if (!experience) {
-      return res.status(404).json({ error: 'Experience not found' });
-    }
-
-    res.json(experience);
+    const data = getSiteData();
+    const idx = data.experiences.findIndex((e) => e.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Experience not found' });
+    data.experiences[idx] = { ...data.experiences[idx], ...req.body };
+    saveSiteData(data);
+    res.json(data.experiences[idx]);
   } catch (error) {
     console.error('Error updating experience:', error);
     res.status(500).json({ error: 'Error updating experience' });
   }
 });
 
-router.delete('/experiences/:id', authenticateToken, async (req, res) => {
+router.delete('/experiences/:id', authenticateToken, (req, res) => {
   try {
-    const experience = await Experience.findOneAndDelete({ id: req.params.id });
-
-    if (!experience) {
-      return res.status(404).json({ error: 'Experience not found' });
-    }
-
+    const data = getSiteData();
+    const idx = data.experiences.findIndex((e) => e.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Experience not found' });
+    data.experiences.splice(idx, 1);
+    saveSiteData(data);
     res.json({ message: 'Experience deleted successfully' });
   } catch (error) {
     console.error('Error deleting experience:', error);
@@ -170,20 +125,24 @@ router.delete('/experiences/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// ========== SKILL CATEGORIES ==========
-router.get('/skill-categories', async (req, res) => {
+// ---------- Skill categories ----------
+router.get('/skill-categories', (req, res) => {
   try {
-    const categories = await SkillCategory.find().sort({ order: 1 });
-    res.json(categories);
+    const data = getSiteData();
+    const sorted = [...data.skillCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
+    res.json(sorted);
   } catch (error) {
     console.error('Error fetching skill categories:', error);
     res.status(500).json({ error: 'Error fetching skill categories' });
   }
 });
 
-router.post('/skill-categories', authenticateToken, async (req, res) => {
+router.post('/skill-categories', authenticateToken, (req, res) => {
   try {
-    const category = await SkillCategory.create(req.body);
+    const data = getSiteData();
+    const category = { ...req.body, _id: `cat-${Date.now()}` };
+    data.skillCategories.push(category);
+    saveSiteData(data);
     res.status(201).json(category);
   } catch (error) {
     console.error('Error creating skill category:', error);
@@ -191,33 +150,27 @@ router.post('/skill-categories', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/skill-categories/:id', authenticateToken, async (req, res) => {
+router.put('/skill-categories/:id', authenticateToken, (req, res) => {
   try {
-    const category = await SkillCategory.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    if (!category) {
-      return res.status(404).json({ error: 'Skill category not found' });
-    }
-
-    res.json(category);
+    const data = getSiteData();
+    const idx = data.skillCategories.findIndex((c) => c._id === req.params.id || String(c.order) === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Skill category not found' });
+    data.skillCategories[idx] = { ...data.skillCategories[idx], ...req.body };
+    saveSiteData(data);
+    res.json(data.skillCategories[idx]);
   } catch (error) {
     console.error('Error updating skill category:', error);
     res.status(500).json({ error: 'Error updating skill category' });
   }
 });
 
-router.delete('/skill-categories/:id', authenticateToken, async (req, res) => {
+router.delete('/skill-categories/:id', authenticateToken, (req, res) => {
   try {
-    const category = await SkillCategory.findByIdAndDelete(req.params.id);
-
-    if (!category) {
-      return res.status(404).json({ error: 'Skill category not found' });
-    }
-
+    const data = getSiteData();
+    const idx = data.skillCategories.findIndex((c) => c._id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Skill category not found' });
+    data.skillCategories.splice(idx, 1);
+    saveSiteData(data);
     res.json({ message: 'Skill category deleted successfully' });
   } catch (error) {
     console.error('Error deleting skill category:', error);
@@ -225,20 +178,24 @@ router.delete('/skill-categories/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// ========== PROJECTS ==========
-router.get('/projects', async (req, res) => {
+// ---------- Projects ----------
+router.get('/projects', (req, res) => {
   try {
-    const projects = await Project.find().sort({ order: 1, createdAt: -1 });
-    res.json(projects);
+    const data = getSiteData();
+    const sorted = [...data.projects].sort((a, b) => (a.order || 0) - (b.order || 0));
+    res.json(sorted);
   } catch (error) {
     console.error('Error fetching projects:', error);
     res.status(500).json({ error: 'Error fetching projects' });
   }
 });
 
-router.post('/projects', authenticateToken, async (req, res) => {
+router.post('/projects', authenticateToken, (req, res) => {
   try {
-    const project = await Project.create(req.body);
+    const data = getSiteData();
+    const project = { ...req.body, id: req.body.id || `p-${Date.now()}` };
+    data.projects.push(project);
+    saveSiteData(data);
     res.status(201).json(project);
   } catch (error) {
     console.error('Error creating project:', error);
@@ -246,33 +203,27 @@ router.post('/projects', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/projects/:id', authenticateToken, async (req, res) => {
+router.put('/projects/:id', authenticateToken, (req, res) => {
   try {
-    const project = await Project.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
-    }
-
-    res.json(project);
+    const data = getSiteData();
+    const idx = data.projects.findIndex((p) => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Project not found' });
+    data.projects[idx] = { ...data.projects[idx], ...req.body };
+    saveSiteData(data);
+    res.json(data.projects[idx]);
   } catch (error) {
     console.error('Error updating project:', error);
     res.status(500).json({ error: 'Error updating project' });
   }
 });
 
-router.delete('/projects/:id', authenticateToken, async (req, res) => {
+router.delete('/projects/:id', authenticateToken, (req, res) => {
   try {
-    const project = await Project.findOneAndDelete({ id: req.params.id });
-
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
-    }
-
+    const data = getSiteData();
+    const idx = data.projects.findIndex((p) => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Project not found' });
+    data.projects.splice(idx, 1);
+    saveSiteData(data);
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {
     console.error('Error deleting project:', error);
@@ -280,20 +231,24 @@ router.delete('/projects/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// ========== CERTIFICATIONS ==========
-router.get('/certifications', async (req, res) => {
+// ---------- Certifications ----------
+router.get('/certifications', (req, res) => {
   try {
-    const certifications = await Certification.find().sort({ order: 1, issueDate: -1 });
-    res.json(certifications);
+    const data = getSiteData();
+    const sorted = [...data.certifications].sort((a, b) => (a.order || 0) - (b.order || 0));
+    res.json(sorted);
   } catch (error) {
     console.error('Error fetching certifications:', error);
     res.status(500).json({ error: 'Error fetching certifications' });
   }
 });
 
-router.post('/certifications', authenticateToken, async (req, res) => {
+router.post('/certifications', authenticateToken, (req, res) => {
   try {
-    const certification = await Certification.create(req.body);
+    const data = getSiteData();
+    const certification = { ...req.body, id: req.body.id || `cert-${Date.now()}` };
+    data.certifications.push(certification);
+    saveSiteData(data);
     res.status(201).json(certification);
   } catch (error) {
     console.error('Error creating certification:', error);
@@ -301,33 +256,27 @@ router.post('/certifications', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/certifications/:id', authenticateToken, async (req, res) => {
+router.put('/certifications/:id', authenticateToken, (req, res) => {
   try {
-    const certification = await Certification.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    if (!certification) {
-      return res.status(404).json({ error: 'Certification not found' });
-    }
-
-    res.json(certification);
+    const data = getSiteData();
+    const idx = data.certifications.findIndex((c) => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Certification not found' });
+    data.certifications[idx] = { ...data.certifications[idx], ...req.body };
+    saveSiteData(data);
+    res.json(data.certifications[idx]);
   } catch (error) {
     console.error('Error updating certification:', error);
     res.status(500).json({ error: 'Error updating certification' });
   }
 });
 
-router.delete('/certifications/:id', authenticateToken, async (req, res) => {
+router.delete('/certifications/:id', authenticateToken, (req, res) => {
   try {
-    const certification = await Certification.findOneAndDelete({ id: req.params.id });
-
-    if (!certification) {
-      return res.status(404).json({ error: 'Certification not found' });
-    }
-
+    const data = getSiteData();
+    const idx = data.certifications.findIndex((c) => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Certification not found' });
+    data.certifications.splice(idx, 1);
+    saveSiteData(data);
     res.json({ message: 'Certification deleted successfully' });
   } catch (error) {
     console.error('Error deleting certification:', error);
@@ -336,4 +285,3 @@ router.delete('/certifications/:id', authenticateToken, async (req, res) => {
 });
 
 export default router;
-
