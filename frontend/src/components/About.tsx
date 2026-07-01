@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface TerminalTypingProps {
   text: string;
@@ -83,27 +83,7 @@ const TerminalTyping: React.FC<TerminalTypingProps> = ({
 };
 
 const About: React.FC = () => {
-  const helloTranslations = [
-    { lang: 'English', text: 'Hello' },
-    { lang: 'Mandarin Chinese', text: '你好' },
-    { lang: 'Hindi', text: 'नमस्ते' },
-    { lang: 'Spanish', text: 'Hola' },
-    { lang: 'French', text: 'Bonjour' },
-    { lang: 'Sinhala', text: 'ආයුබෝවන්' }
-  ];
-
-  const [currentHelloIndex, setCurrentHelloIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentHelloIndex((prev) => (prev + 1) % helloTranslations.length);
-    }, 2000); // Change every 2 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Realistic cursor blink animation
   useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
@@ -128,22 +108,11 @@ const About: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
           <h3 className="text-green-500 dark:text-green-400 font-mono text-sm uppercase tracking-widest">About Me</h3>
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-white flex items-center justify-center gap-3 min-h-[3rem]">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={currentHelloIndex}
-                initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.8 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="inline-block"
-              >
-                {helloTranslations[currentHelloIndex].text}
-              </motion.span>
-            </AnimatePresence>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
+            Who I Am
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4">
-            A brief professional introduction and overview of who I am
+            A brief professional introduction and overview of my story
           </p>
         </div>
         <motion.div

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Download, Mail, MapPin } from 'lucide-react';
 import { useSiteData } from "@/contexts/SiteDataContext";
 import TypingText from './TypingText';
-import TerminalTypingText from './TerminalTypingText';
+import HelloRotator from './HelloRotator';
 
 const Hero: React.FC = () => {
   const { siteData } = useSiteData();
@@ -121,6 +121,15 @@ const Hero: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Text Content */}
           <div className="max-w-3xl lg:max-w-none">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-2"
+            >
+              <HelloRotator className="text-4xl md:text-6xl font-bold text-green-500 dark:text-green-400" />
+            </motion.div>
+
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
