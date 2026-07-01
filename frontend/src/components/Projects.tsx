@@ -40,7 +40,7 @@ const Projects: React.FC = () => {
               className="group relative"
             >
               {/* Card */}
-              <div className="h-full flex flex-col glass-card rounded-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 hover:border-green-500/40 dark:hover:border-green-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 dark:hover:shadow-green-500/5 hover:-translate-y-1">
+              <div className="h-full flex flex-col glass-card rounded-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/20 hover:-translate-y-1">
                 {/* Header with icon */}
                 <div className="p-6 pb-4 border-b border-slate-200/50 dark:border-white/5">
                   <div className="flex items-start justify-between mb-4">
