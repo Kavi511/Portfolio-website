@@ -20,7 +20,7 @@ export const PERSONAL_INFO = {
   name: "Kavishka Herath",
   role: "Aspiring SRE & DevOps Engineer",
   tagline: "Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.",
-  about: "A final year Computer Science undergraduate passionate about Cloud Computing and DevOps. Focused on building highly available, scalable, and automated systems that empower developers and enhance operational efficiency.",
+  about: "A final year Computer Science undergraduate passionate about Cloud Computing and DevOps. Focused on building highly available, scalable and automated systems that empower developers and enhance operational efficiency.",
   location: "Colombo, Sri Lanka",
   education: "CINEC Campus (Pvt) Ltd – Sri Lanka\nBSc (Hons) Computer Science (University of Wolverhampton)",
   email: "kavishkacherath@gmail.com",
