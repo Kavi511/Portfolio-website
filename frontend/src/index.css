@@ -34,3 +34,240 @@ body {
   min-height: 100vh;
 }
 
+@layer components {
+  .experience-ladder {
+    --ladder-rung-width: 6rem;
+    --ladder-rail-width: 0.25rem;
+    --ladder-rail-gap: 6rem;
+    --ladder-item-gap: 4rem;
+    position: relative;
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  /* Continuous vertical rails spanning the full timeline */
+  .experience-ladder__rails {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .experience-ladder__rails {
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: var(--ladder-rail-gap);
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .experience-ladder__rails::before,
+    .experience-ladder__rails::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: var(--ladder-rail-width);
+      border-radius: 9999px;
+      background-color: #0f172a;
+    }
+
+    .experience-ladder__rails::before {
+      left: 0;
+    }
+
+    .experience-ladder__rails::after {
+      right: 0;
+    }
+
+    .dark .experience-ladder__rails::before,
+    .dark .experience-ladder__rails::after {
+      background-color: #ffffff;
+    }
+  }
+
+  .experience-ladder__list {
+    list-style: none;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ladder-item-gap);
+  }
+
+  .experience-ladder__item {
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: 8rem;
+  }
+
+  /* Desktop: symmetric 3-column grid with ladder rung locked to center */
+  @media (min-width: 768px) {
+    .experience-ladder__item {
+      grid-template-columns: minmax(0, 1fr) var(--ladder-rung-width) minmax(0, 1fr);
+      column-gap: 0.75rem;
+    }
+
+    .experience-ladder__item--left .experience-ladder__card {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .experience-ladder__item--right .experience-ladder__card {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: start;
+    }
+
+    .experience-ladder__connector {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      position: relative;
+      width: var(--ladder-rung-width);
+      height: var(--ladder-rail-width);
+      z-index: 2;
+    }
+  }
+
+  /* Mobile: single rail with cards on the right */
+  @media (max-width: 767px) {
+    .experience-ladder__item {
+      grid-template-columns: 2rem minmax(0, 1fr);
+      column-gap: 1rem;
+      padding-left: 0.5rem;
+    }
+
+    .experience-ladder__item::before {
+      content: '';
+      position: absolute;
+      left: 1.25rem;
+      top: 0;
+      bottom: calc(var(--ladder-item-gap) * -0.5);
+      width: var(--ladder-rail-width);
+      border-radius: 9999px;
+      background-color: #0f172a;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .dark .experience-ladder__item::before {
+      background-color: #ffffff;
+    }
+
+    .experience-ladder__list > .experience-ladder__item:last-child::before {
+      bottom: 50%;
+    }
+
+    .experience-ladder__connector {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      align-self: center;
+      position: relative;
+      width: 1.25rem;
+      height: var(--ladder-rail-width);
+      z-index: 2;
+    }
+
+    .experience-ladder__card {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  .experience-ladder__rung {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: #0f172a;
+  }
+
+  .dark .experience-ladder__rung {
+    background-color: #ffffff;
+  }
+
+  @media (max-width: 767px) {
+    .experience-ladder__rung {
+      left: 50%;
+      right: auto;
+      width: 1.25rem;
+      transform: translateX(-50%);
+    }
+  }
+
+  .experience-ladder__dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    border: 2px solid #ffffff;
+    background-color: #22c55e;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+    z-index: 3;
+  }
+
+  .dark .experience-ladder__dot {
+    border-color: #0f172a;
+    background-color: #4ade80;
+  }
+
+  .experience-ladder__dot-ping {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: inherit;
+    opacity: 0.5;
+    animation: experience-ladder-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes experience-ladder-ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  .experience-ladder__card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .experience-ladder__item--left .experience-ladder__card::after,
+    .experience-ladder__item--right .experience-ladder__card::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 0.75rem;
+      height: var(--ladder-rail-width);
+      transform: translateY(-50%);
+      border-radius: 9999px;
+      background-color: #0f172a;
+      z-index: 0;
+    }
+
+    .dark .experience-ladder__item--left .experience-ladder__card::after,
+    .dark .experience-ladder__item--right .experience-ladder__card::before {
+      background-color: #ffffff;
+    }
+
+    .experience-ladder__item--left .experience-ladder__card::after {
+      right: -0.75rem;
+    }
+
+    .experience-ladder__item--right .experience-ladder__card::before {
+      left: -0.75rem;
+    }
+  }
+}
+
