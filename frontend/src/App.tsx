@@ -147,7 +147,7 @@ function AppContent() {
                       </svg>
                     </a>
                     <a 
-                      href={siteData.personalInfo.strava || "#"} 
+                      href={siteData.personalInfo.strava || "https://strava.app.link/jjN1cdl5p4b"} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="w-12 h-12 glass-card rounded-xl flex items-center justify-center text-slate-400 dark:text-slate-400 hover:text-[#FC4C02] dark:hover:text-[#FC4C02] hover:border-[#FC4C02]/30 shadow-sm dark:shadow-none transition-all"

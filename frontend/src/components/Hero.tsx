@@ -235,7 +235,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="hidden lg:flex items-center justify-center"
+            className="flex items-center justify-center"
           >
             <motion.div 
               className="relative w-full max-w-md"
@@ -250,13 +250,9 @@ const Hero: React.FC = () => {
             >
               <div className="rounded-3xl overflow-hidden glass-card p-2 shadow-2xl">
                 <img 
-                  src="/profile.jpg" 
+                  src={`${import.meta.env.BASE_URL}profile.jpg`}
                   alt={PERSONAL_INFO.name}
                   className="w-full h-auto object-contain rounded-2xl"
-                  onError={(e) => {
-                    // Fallback to placeholder if image doesn't exist
-                    (e.target as HTMLImageElement).src = "https://picsum.photos/seed/portrait/800/800";
-                  }}
                 />
               </div>
               {/* Decorative elements */}

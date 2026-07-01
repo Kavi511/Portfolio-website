@@ -33,7 +33,7 @@ const Experience: React.FC = () => {
           {/* Experience Cards with Ladder Rungs */}
           <div className="space-y-12 relative">
             {EXPERIENCES.map((exp, index) => {
-              const isEven = index % 2 === 0;
+              const isRight = index % 2 === 0;
               
               return (
                 <motion.div
@@ -42,25 +42,23 @@ const Experience: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="relative flex items-center md:justify-between"
+                  className="relative min-h-[120px]"
                 >
                   {/* Ladder Rung - Horizontal bar connecting the two rails */}
                   <div 
-                    className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-20 md:w-24 h-2 bg-black dark:bg-white z-10 rounded-full"
-                    style={{ top: '50%', transform: 'translateY(-50%)' }}
+                    className="absolute left-8 md:left-1/2 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-16 md:w-24 h-2 bg-black dark:bg-white z-10 rounded-full"
                   ></div>
                   
                   {/* Timeline Dot on Rung */}
                   <div 
-                    className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-6 h-6 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-20 border-2 border-white dark:border-slate-900" 
-                    style={{ top: '50%', transform: 'translate(-50%, -50%)' }}
+                    className="absolute left-8 md:left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-green-500 dark:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-20 border-2 border-white dark:border-slate-900"
                   >
                     <div className="absolute inset-0 rounded-full bg-green-500 dark:bg-green-400 opacity-50 animate-ping"></div>
                   </div>
 
-                  {/* Content Card */}
-                  <div className={`ml-8 md:ml-0 md:w-[45%] relative z-10 ${
-                    isEven ? 'md:flex-row-reverse md:text-right' : ''
+                  {/* Content Card - alternate sides on desktop (first card on the right) */}
+                  <div className={`ml-16 md:ml-0 md:w-[calc(50%-3rem)] relative z-10 ${
+                    isRight ? 'md:ml-[calc(50%+3rem)]' : 'md:mr-[calc(50%+3rem)]'
                   }`}>
                     <motion.div
                       whileHover={{ scale: 1.02 }}

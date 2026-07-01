@@ -109,7 +109,11 @@ const getInitialData = (): SiteData => {
     }) : defaults.projects;
     
     return {
-      personalInfo: { ...defaults.personalInfo, ...stored.personalInfo },
+      personalInfo: {
+        ...defaults.personalInfo,
+        ...stored.personalInfo,
+        strava: stored.personalInfo?.strava || defaults.personalInfo.strava,
+      },
       professionalSummary: { ...defaults.professionalSummary, ...stored.professionalSummary },
       experiences: [...defaults.experiences, ...additionalStored],
       skillCategories: defaults.skillCategories,
