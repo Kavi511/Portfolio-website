@@ -141,7 +141,14 @@ portfolio-website/
 
 ## 🛠️ Technology Stack
 
-
+### Frontend
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Lucide React** - Icon library
+- **Context API** - State management
 
 ### Backend
 - **Node.js** - Runtime environment
