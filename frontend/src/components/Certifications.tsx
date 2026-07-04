@@ -67,6 +67,20 @@ const Certifications: React.FC = () => {
                     {cert.description}
                   </p>
                 )}
+
+                <div className="mt-auto pt-4">
+                  {cert.credentialUrl && (
+                    <a
+                      href={cert.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 transition-colors"
+                    >
+                      View Certificate
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}

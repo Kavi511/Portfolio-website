@@ -11,14 +11,14 @@ const CONTACT_MESSAGES_FILE = path.join(DATA_DIR, 'contactMessages.json');
 
 const defaultSiteData = {
   personalInfo: {
-    name: 'Your Name',
-    role: 'Your Role',
-    tagline: 'Your Tagline',
-    about: 'About you',
-    location: 'Your Location',
+    name: 'Kavishka Herath',
+    role: 'Aspiring SRE, DevOps & Cloud Enthusiast',
+    tagline: 'Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.',
+    about: 'A final year Computer Science undergraduate passionate about Cloud Computing and DevOps.',
+    location: 'Colombo, Sri Lanka',
     education: '',
-    email: 'your@email.com',
-    phone: 'Your Phone',
+    email: 'kavishkacherath@gmail.com',
+    phone: '+94 72 764 3866',
     github: '',
     linkedin: '',
     medium: '',

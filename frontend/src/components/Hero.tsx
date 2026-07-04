@@ -2,20 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Mail, MapPin } from 'lucide-react';
+import { PERSONAL_INFO as STATIC_HEADER } from "@/constants";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import TypingText from './TypingText';
 import HelloRotator from './HelloRotator';
 
 const Hero: React.FC = () => {
   const { siteData } = useSiteData();
-  const PERSONAL_INFO = siteData.personalInfo;
+  const personalInfo = siteData.personalInfo;
   const [showName, setShowName] = useState(false);
   const [showRole, setShowRole] = useState(false);
   const [showTagline, setShowTagline] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // Ensure name is always available
-  const displayName = PERSONAL_INFO?.name || "Kavishka Herath";
+  const displayName = personalInfo?.name || STATIC_HEADER.name;
+  const headerRole = STATIC_HEADER.role;
+  const headerTagline = STATIC_HEADER.tagline;
 
   // Fallback: Show name after 2 seconds if typing doesn't trigger it
   useEffect(() => {

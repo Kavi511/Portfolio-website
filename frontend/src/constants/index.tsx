@@ -18,8 +18,8 @@ import { Experience, SkillCategory, Project, Certification } from './types';
 
 export const PERSONAL_INFO = {
   name: "Kavishka Herath",
-  role: "Aspiring SRE & DevOps Engineer",
-  tagline: "Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.",
+  role: "Aspiring SRE, DevOps & Cloud Enthusiast",
+  tagline: "Bridging the gap between development and operations through automation, cloud efficiency and infrastructure excellence.",
   about: "A final year Computer Science undergraduate passionate about Cloud Computing and DevOps. Focused on building highly available, scalable and automated systems that empower developers and enhance operational efficiency.",
   location: "Colombo, Sri Lanka",
   education: "CINEC Campus (Pvt) Ltd – Sri Lanka\nBSc (Hons) Computer Science (University of Wolverhampton)",
@@ -180,5 +180,58 @@ export const PROJECTS: Project[] = [
 ];
 
 export const CERTIFICATIONS: Certification[] = [
-  // Add your certifications here
+  {
+    id: 'cert-1',
+    name: 'Introduction to Networking',
+    issuer: 'NVIDIA',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-2',
+    name: 'Introduction to Jira',
+    issuer: 'Atlassian',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-3',
+    name: 'Embedded Software and Hardware Architecture',
+    issuer: 'University of Colorado Boulder',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-4',
+    name: 'AI For Everyone',
+    issuer: 'DeepLearning.AI',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-5',
+    name: 'Machine Learning & FPGAs',
+    issuer: 'IEEE CINEC Student Branch',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-6',
+    name: 'Introduction to Software Engineering',
+    issuer: 'IBM',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-7',
+    name: 'Introduction to Git and GitHub',
+    issuer: 'Google',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-8',
+    name: 'Linux for Beginners with Hands on Labs',
+    issuer: 'KodeKloud',
+    credentialUrl: '',
+  },
+  {
+    id: 'cert-9',
+    name: 'Fundamentals of Containers, Kubernetes and OpenShift',
+    issuer: 'Red Hat',
+    credentialUrl: '',
+  },
 ];

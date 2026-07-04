@@ -112,13 +112,14 @@ const getInitialData = (): SiteData => {
       personalInfo: {
         ...defaults.personalInfo,
         ...stored.personalInfo,
+        role: defaults.personalInfo.role,
         strava: stored.personalInfo?.strava || defaults.personalInfo.strava,
       },
       professionalSummary: { ...defaults.professionalSummary, ...stored.professionalSummary },
       experiences: [...defaults.experiences, ...additionalStored],
       skillCategories: defaults.skillCategories,
       projects: mergedProjects,
-      certifications: stored.certifications || defaults.certifications,
+      certifications: stored.certifications?.length > 0 ? stored.certifications : defaults.certifications,
     };
   }
   
@@ -135,7 +136,11 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
   const updatePersonalInfo = (data: Partial<PersonalInfo>) => {
     setSiteData(prev => ({
       ...prev,
-      personalInfo: { ...prev.personalInfo, ...data }
+      personalInfo: {
+        ...prev.personalInfo,
+        ...data,
+        role: defaultData.PERSONAL_INFO.role,
+      }
     }));
   };
 
