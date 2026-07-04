@@ -13,7 +13,7 @@ const defaultSiteData = {
   personalInfo: {
     name: 'Kavishka Herath',
     role: 'Aspiring SRE, DevOps & Cloud Enthusiast',
-    tagline: 'Bridging the gap between development and operations through automation, cloud efficiency, and infrastructure excellence.',
+    tagline: 'Bridging the gap between development and operations through automation, cloud efficiency and infrastructure excellence.',
     about: 'A final year Computer Science undergraduate passionate about Cloud Computing and DevOps.',
     location: 'Colombo, Sri Lanka',
     education: '',

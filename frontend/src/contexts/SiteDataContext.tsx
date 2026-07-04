@@ -56,6 +56,9 @@ export const useSiteData = () => {
   return context;
 };
 
+const SITE_DATA_VERSION = 2;
+const SITE_DATA_VERSION_KEY = 'portfolio-site-data-version';
+
 const loadFromStorage = (): SiteData | null => {
   try {
     const stored = localStorage.getItem('portfolio-site-data');
@@ -113,6 +116,7 @@ const getInitialData = (): SiteData => {
         ...defaults.personalInfo,
         ...stored.personalInfo,
         role: defaults.personalInfo.role,
+        tagline: defaults.personalInfo.tagline,
         strava: stored.personalInfo?.strava || defaults.personalInfo.strava,
       },
       professionalSummary: { ...defaults.professionalSummary, ...stored.professionalSummary },
@@ -140,6 +144,7 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
         ...prev.personalInfo,
         ...data,
         role: defaultData.PERSONAL_INFO.role,
+        tagline: defaultData.PERSONAL_INFO.tagline,
       }
     }));
   };
@@ -183,6 +188,24 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
   const saveToStorageHandler = () => {
     saveToStorage(siteData);
   };
+
+  // Sync locked header fields when site data version changes
+  useEffect(() => {
+    const storedVersion = localStorage.getItem(SITE_DATA_VERSION_KEY);
+    if (storedVersion === String(SITE_DATA_VERSION)) {
+      return;
+    }
+
+    setSiteData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        role: defaultData.PERSONAL_INFO.role,
+        tagline: defaultData.PERSONAL_INFO.tagline,
+      },
+    }));
+    localStorage.setItem(SITE_DATA_VERSION_KEY, String(SITE_DATA_VERSION));
+  }, []);
 
   // Migration: Ensure education field exists on mount
   useEffect(() => {

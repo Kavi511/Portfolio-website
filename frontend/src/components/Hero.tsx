@@ -46,9 +46,9 @@ const Hero: React.FC = () => {
       // Always use the standard endpoint path (ignore cvUrl from database for internal downloads)
       const endpointPath = '/api/upload/cv/download';
       
-      if (PERSONAL_INFO.cvUrl?.startsWith('http')) {
+      if (personalInfo.cvUrl?.startsWith('http')) {
         // External URL - use as is
-        downloadUrl = PERSONAL_INFO.cvUrl;
+        downloadUrl = personalInfo.cvUrl;
       } else if (isNetworkAccess) {
         // For network access, construct full URL using current hostname and backend port
         const backendPort = '5000';
@@ -171,7 +171,7 @@ const Hero: React.FC = () => {
                 className="text-2xl md:text-3xl font-semibold mb-8 min-h-[1.5em] text-slate-700 dark:text-slate-300"
               >
                 <TypingText 
-                  text={PERSONAL_INFO.role}
+                  text={headerRole}
                   speed={50}
                   onComplete={() => {
                     setTimeout(() => setShowTagline(true), 500);
@@ -188,7 +188,7 @@ const Hero: React.FC = () => {
                 className="text-lg mb-6 leading-relaxed max-w-2xl min-h-[3em] text-slate-600 dark:text-slate-400"
               >
                 <TypingText 
-                  text={PERSONAL_INFO.tagline}
+                  text={headerTagline}
                   speed={30}
                 />
               </motion.p>
@@ -202,7 +202,7 @@ const Hero: React.FC = () => {
                 className="flex items-center gap-2 mb-12 text-slate-600 dark:text-slate-400"
               >
                 <MapPin size={18} className="text-green-500 dark:text-green-400" />
-                <span className="text-base">{PERSONAL_INFO.location}</span>
+                <span className="text-base">{personalInfo.location}</span>
               </motion.div>
             )}
 
@@ -220,9 +220,9 @@ const Hero: React.FC = () => {
                 <Mail className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
-                href={PERSONAL_INFO.cvUrl?.startsWith('http') 
-                  ? PERSONAL_INFO.cvUrl 
-                  : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${PERSONAL_INFO.cvUrl || "/api/upload/cv/download"}`}
+                href={personalInfo.cvUrl?.startsWith('http') 
+                  ? personalInfo.cvUrl 
+                  : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${personalInfo.cvUrl || "/api/upload/cv/download"}`}
                 onClick={handleDownloadCV}
                 className="flex items-center justify-center px-8 py-4 bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 border border-slate-300 dark:border-white/10 transition-all group cursor-pointer"
               >
@@ -262,7 +262,7 @@ const Hero: React.FC = () => {
               <div className="rounded-3xl overflow-hidden glass-card p-2 shadow-2xl">
                 <img 
                   src={`${import.meta.env.BASE_URL}profile.jpg`}
-                  alt={PERSONAL_INFO.name}
+                  alt={personalInfo.name}
                   className="w-full h-auto object-contain rounded-2xl"
                 />
               </div>
