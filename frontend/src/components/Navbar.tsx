@@ -1,12 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Settings } from 'lucide-react';
 
-interface NavbarProps {
-  onAdminClick: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
+const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -46,19 +41,6 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
                 {link.name}
               </a>
             ))}
-          </div>
-
-          {/* Right Side Icons */}
-          <div className="absolute right-0 flex items-center space-x-4">
-            {/* Admin Portal Icon */}
-            <button
-              onClick={onAdminClick}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              aria-label="Admin Portal"
-              title="Admin Portal"
-            >
-              <Settings size={20} />
-            </button>
           </div>
         </div>
       </div>

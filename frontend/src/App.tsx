@@ -59,7 +59,7 @@ function AppContent() {
       ) : (
         <div className="min-h-screen selection:bg-green-500/30 relative transition-colors duration-300 bg-slate-50 dark:bg-black">
           <BackgroundParticles />
-          <Navbar onAdminClick={() => setShowAdmin(true)} />
+          <Navbar />
           
           <main className="relative z-20">
             <Hero />
@@ -179,6 +179,12 @@ function AppContent() {
                     className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
                   >
                     Terms
+                  </button>
+                  <button 
+                    onClick={() => setShowAdmin(true)}
+                    className="text-slate-500 dark:text-slate-400 hover:text-green-500 dark:hover:text-green-400 transition-colors"
+                  >
+                    Admin Portal
                   </button>
                 </div>
               </div>
